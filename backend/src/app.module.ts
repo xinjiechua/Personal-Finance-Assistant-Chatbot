@@ -8,10 +8,10 @@ import { TransactionsController } from './transactions/transactions.controller';
 import { TransactionsService } from './transactions/transactions.service';
 import { TransactionsModule } from './transactions/transactions.module';
 import { PrismaService } from './prisma.service';
-
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [UsersModule, TransactionsModule],
+  imports: [UsersModule, TransactionsModule,ConfigModule.forRoot()],
   controllers: [AppController, TransactionsController],
   providers: [AppService, TransactionsService, PrismaService, UsersService],
 })
