@@ -25,8 +25,8 @@ CREATE TABLE "Transaction" (
     "description" TEXT NOT NULL,
     "category" TEXT NOT NULL,
     "payment_method" TEXT NOT NULL,
-    "withdrawal_amt" INTEGER NOT NULL,
-    "deposit_amt" INTEGER NOT NULL,
+    "withdrawal_amt" DOUBLE PRECISION NOT NULL,
+    "deposit_amt" DOUBLE PRECISION NOT NULL,
     "userId" INTEGER NOT NULL,
 
     CONSTRAINT "Transaction_pkey" PRIMARY KEY ("id")
