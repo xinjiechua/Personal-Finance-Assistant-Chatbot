@@ -111,6 +111,9 @@ class AssistantManager:
                     print(f"OUTPUT:: {output}")
 
                     tool_outputs.append({"tool_call_id": action["id"], "output": output})
+                elif func_name == "data_visualisation":
+                    print(arguments)
+                    tool_outputs.append({"tool_call_id": action["id"], "output": "visualisation done"})
                 else:
                     raise ValueError(f"Unknown function: {func_name}")
 

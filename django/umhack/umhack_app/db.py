@@ -12,7 +12,7 @@ def execute_query(sql_query: str = None):
         conn = psycopg2.connect(os.environ.get("DATABASE_URL"))
         cur = conn.cursor()
         cur.execute(sql_query)
-        result = cur.fetchone()
+        result = cur.fetchall()
         print(result)
         cur.close()
         conn.close()
