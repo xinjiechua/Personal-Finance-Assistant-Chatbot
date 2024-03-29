@@ -36,7 +36,7 @@ def send_message(request):
         
         # Add message to thread
         manager.add_message_to_thread('user', data.get('message'))
-        manager.run_assistant(instructions=None)
+        manager.run_assistant(f"userId is {data.get('userId')}")
         responded_message = manager.wait_for_completion()
         # manager.run_steps() # print run steps for debugging
         

@@ -22,14 +22,14 @@ def create_assistant():
                 "properties": {
                     "sql_query": {
                         "type": "string",
-                        "description": "SQL query to get the data from the user finance database ie 'SELECT SUM(WITHDRAWAL_AMT) FROM data WHERE DATE BETWEEN '2021-01-01' AND '2021-12-31' AND CATEGORY='Grocery' AND PAYMENT_METHOD='Credit Card'"
+                        "description": "SQL query to get the data from the user finance database ie 'SELECT SUM(WITHDRAWAL_AMT) FROM \"Transaction\" WHERE DATE BETWEEN '2021-01-01' AND '2021-12-31' AND CATEGORY='Grocery' AND PAYMENT_METHOD='Credit Card'"
                     },
-                    "user_id": {
+                    "userId": {
                         "type": "string",
                         "description": "User ID of the user whose data is to be fetched from the database"
                     }
                 },
-                "required": ["sql_query", "user_id"]
+                "required": ["sql_query", "userId"]
             }   
         }
     }]

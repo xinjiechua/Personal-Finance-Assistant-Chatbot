@@ -10,6 +10,7 @@ from django.http import HttpResponse
 import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from .db import execute_query
 
 load_dotenv()
 
@@ -21,8 +22,18 @@ client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 assistant = client.beta.assistants.retrieve(assistant_id="asst_IbFqFruhOkr9PRMPpxbi5f06")
 
 # functions to be called
-def get_data(sql_query, user_id):
-    return f"Data fetched for user {user_id} with query {sql_query}"
+def get_data(sql_query, userId):
+    # return f"Data fetched for user {userId} with query {sql_query}"
+    print(f"SQL_QUERY::: {sql_query}")
+    print(f"SQL_QUERY::: {sql_query}")
+    print(f"SQL_QUERY::: {sql_query}")
+    # Assuming execute_query returns a list of dictionaries
+    query_result = execute_query(sql_query)
+    
+    # Convert the result into a JSON string
+    result_string = json.dumps(query_result)
+    
+    return result_string
 
 class AssistantManager:
     thread_id = None
@@ -96,7 +107,7 @@ class AssistantManager:
                 arguments = json.loads(action["function"]["arguments"])
 
                 if func_name == "get_data":
-                    output = get_data(sql_query=arguments["sql_query"], user_id=arguments["user_id"])
+                    output = get_data(sql_query=arguments["sql_query"], userId=arguments["userId"])
                     print(f"OUTPUT:: {output}")
 
                     tool_outputs.append({"tool_call_id": action["id"], "output": output})
@@ -111,7 +122,7 @@ class AssistantManager:
     def wait_for_completion(self):
         if self.thread and self.run:
             while True:
-                # time.sleep(5)
+                time.sleep(5)
                 run_status = self.client.beta.threads.runs.retrieve(
                     thread_id=self.thread.id, run_id=self.run.id
                 )
