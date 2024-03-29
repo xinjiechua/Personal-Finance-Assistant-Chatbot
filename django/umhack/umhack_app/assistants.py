@@ -10,7 +10,10 @@ from django.http import HttpResponse
 import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+
 from .db import execute_query
+from .prediction_model import run_model
+
 
 load_dotenv()
 
@@ -34,6 +37,12 @@ def get_data(sql_query, userId):
     result_string = json.dumps(query_result)
     
     return result_string
+
+def visualisation_and_prediction(prompt):
+    response = run_model(prompt)
+    print(f"RESPONSE::: {response}")
+    return 'Success'
+    
 
 class AssistantManager:
     thread_id = None
@@ -107,12 +116,15 @@ class AssistantManager:
                 arguments = json.loads(action["function"]["arguments"])
 
                 if func_name == "get_data":
+                    print(f"EXECUTING FUNCTION:: {func_name} with arguments:: {arguments}")
                     output = get_data(sql_query=arguments["sql_query"], userId=arguments["userId"])
                     print(f"OUTPUT:: {output}")
 
                     tool_outputs.append({"tool_call_id": action["id"], "output": output})
-                elif func_name == "data_visualisation":
-                    print(arguments)
+                    
+                elif func_name == "visualisation_and_prediction":
+                    print(f"EXECUTING FUNCTION:: {func_name} with arguments:: {arguments}")
+                    output = visualisation_and_prediction(prompt=arguments["prompt"])
                     tool_outputs.append({"tool_call_id": action["id"], "output": "visualisation done"})
                 else:
                     raise ValueError(f"Unknown function: {func_name}")
@@ -132,6 +144,7 @@ class AssistantManager:
                 # print(f"RUN STATUS:: {run_status.model_dump_json(indent=4)}")
 
                 if run_status.status == "completed":
+                    # FINAL RETURN HERE
                     return self.process_message()
                     break
                 elif run_status.status == "requires_action" and run_status.required_action:

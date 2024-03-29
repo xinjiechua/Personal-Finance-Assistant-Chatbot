@@ -1,0 +1,5 @@
+{
+    "python.analysis.extraPaths": [
+        "./django/umhack/umhack_app/migrations"
+    ]
+}
