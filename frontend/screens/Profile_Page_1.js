@@ -61,7 +61,7 @@ function Profile_Page_1({ navigation, route }) {
         {
             icon: logo.lock_icon,
             title: "Privacy & Security",
-            navigation: () => {},
+            navigation: () => { },
             index: 3,
         },
         {
@@ -91,7 +91,7 @@ function Profile_Page_1({ navigation, route }) {
         {
             icon: logo.tnc_icon,
             title: "Terms & Conditions",
-            navigation: () => {},
+            navigation: () => { },
             index: 8,
         },
     ];
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
         marginVertical: sh(10),
         fontSize: sw(22),
         fontFamily: fonts.interSemiBold,
-        color: "#5F84A1",
+        color: "#5B69D6",
     },
     contentContainer: {
         flex: 1,

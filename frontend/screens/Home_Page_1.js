@@ -72,12 +72,6 @@ function Home_Page_1({ navigation }) {
                 style={{ backgroundColor: colors.white, height: "100%" }}
             >
                 <View
-                    style={{
-                        height: sh(200),
-                        backgroundColor: "rgba(109,123,233,0.5)",
-                        paddingTop: sh(30),
-                        marginBottom: sh(50),
-                    }}
                 >
                     {/* <Text
                     style={{
@@ -90,8 +84,8 @@ function Home_Page_1({ navigation }) {
                 </Text> */}
                     <LinearGradient
                         style={styles.cardContainer}
-                        colors={["#7499B6", "#5F84A1", "#2E3A94"]}
-                        start={{ x: 0.38, y: -0.9 }}
+                        colors={['#6D7BE9', '#5B69D6', '#2E3A94']}
+                        start={{ x: 0.4, y: -0.9 }}
                         end={{ x: 0, y: 0 }}
                         locations={[0, 0.3, 1]}
                     >
@@ -177,14 +171,14 @@ function Home_Page_1({ navigation }) {
                             { color: colors.black, fontSize: 18, flex: 1 },
                         ]}
                     >
-                        Transactions History
+                        Trend Analysis
                     </Text>
                     <TouchableOpacity onPress={toTransactionPage}>
                         <Text
                             style={[
                                 {
                                     fontFamily: fonts.interMedium,
-                                    color: "#5F84A1",
+                                    color: "#5B69D6",
                                     fontSize: 18,
                                 },
                             ]}
@@ -248,7 +242,7 @@ function Home_Page_1({ navigation }) {
                         <Ellipse
                             cx={30.526}
                             cy={29.698}
-                            fill="#5F84A1"
+                            fill="#5B69D6"
                             rx={29.474}
                             ry={29.698}
                         />

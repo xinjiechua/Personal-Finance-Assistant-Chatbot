@@ -3,7 +3,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home_Page_1 from "../screens/Home_Page_1";
 import Home_Page_2 from "../screens/Home_Page_2";
 import Expenses_Page_1 from "../screens/Expenses_Main";
-import Expenses_Page_2 from "../screens/Expenses_Add_Transaction";
 import Profile_Page_1 from "../screens/Profile_Page_1";
 import Login_Page from "../screens/Login_Page";
 import Signup_Page from "../screens/Signup_Page";
@@ -16,7 +15,6 @@ import Expenses_Main from '../screens/Expenses/Expenses_Main';
 import Expenses_Add_1 from "../screens/Expenses/Expenses_Add_1";
 import Expenses_Transaction from "../screens/Expenses/Expenses_Transaction";
 import Chat from "../screens/Chat";
-import Add_Transaction from "../screens/Expenses_Add_Transaction";
 
 function AppNav() {
     const { isAuth, setIsAuth } = useContext(GlobalContext);
@@ -46,7 +44,7 @@ function AppNav() {
                 />
             );
         },
-        tabBarActiveTintColor: "#5F84A1",
+        tabBarActiveTintColor: "#5B69D6",
         tabBarInactiveTintColor: "#000",
         tabBarStyle: tabBarOptions.style,
         tabBarHideOnKeyboard: { tabBarHideOnKeyboard: true },
@@ -62,7 +60,7 @@ function AppNav() {
                         headerTitle: "Dashboard",
                     }}
                 />
-                <HomeStack.Screen name="Home2" component={Home_Page_2} />
+                {/* <HomeStack.Screen name="Home2" component={Home_Page_2} /> */}
                 <HomeStack.Screen
                     name="Chat"
                     component={Chat}
@@ -70,6 +68,20 @@ function AppNav() {
                         headerTitleAlign: "center",
                         headerTitle: "",
                     }}
+                />
+                <ExpensesStack.Screen
+                    name="Expenses_Transaction"
+                    component={Expenses_Transaction}
+                    options={{
+                        title: 'Transaction',
+                        headerTitleAlign: 'center',
+                    }}
+                />
+
+                <ExpensesStack.Screen
+                    name="Expenses_Add_1"
+                    component={Expenses_Add_1}
+                    options={{ headerTitle: '', headerBackTitle: '' }}
                 />
             </HomeStack.Navigator>
         );

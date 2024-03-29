@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: sw(1),
         borderBottomColor: '#C1BFC0'
     },
-    switchTextContainer:{
+    switchTextContainer: {
         flex: 0.8,
         flexDirection: 'column',
         marginRight: sw(10),
@@ -60,8 +60,8 @@ const RenderNotificationContainer = ({ title, content }) => {
             <Switch
                 onValueChange={toggleSwitch}
                 value={isEnabled}
-                trackColor={{ false: '#FFFFFF', true: '#5F84A1' }}
-                thumbColor={isEnabled ? '#FFFFFF' : '#5F84A1'}
+                trackColor={{ false: '#FFFFFF', true: '#5B69D6' }}
+                thumbColor={isEnabled ? '#FFFFFF' : '#5B69D6'}
                 style={styles.toggleOff}
             />
         </View>

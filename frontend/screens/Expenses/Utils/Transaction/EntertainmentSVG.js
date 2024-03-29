@@ -1,7 +1,7 @@
 import * as React from "react";
 import Svg, { Rect, Path } from "react-native-svg";
 
-const ShoppingSVG = () => {
+const EntertainmentSVG = () => {
     return (
         <Svg
             xmlns="http://www.w3.org/2000/svg"
@@ -22,4 +22,4 @@ const ShoppingSVG = () => {
     );
 };
 
-export default ShoppingSVG;
+export default EntertainmentSVG;

@@ -14,7 +14,7 @@ export const colors = {
     columbiaBlue: "#CBDEED",
     columbiaBlue2: "#B6D0E1",
     powderBlue: "#90AFC4",
-    aliForceBlue: "#5F84A1",
+    aliForceBlue: "#5B69D6",
     indigoDye: "#1A4568",
     black: "#000000",
     white: "#FFFFFF",

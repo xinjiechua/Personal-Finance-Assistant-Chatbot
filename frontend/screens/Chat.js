@@ -281,7 +281,7 @@ const Chat = ({ navigation }) => {
             </ScrollView>
             <View style={styles.inputContainer}>
                 <TouchableOpacity style={styles.iconButton}>
-                    <Ionicons name="mic" size={24} color="#5F84A1" />
+                    <Ionicons name="mic" size={24} color="#5B69D6" />
                 </TouchableOpacity>
                 <TextInput
                     style={styles.input}
@@ -294,7 +294,7 @@ const Chat = ({ navigation }) => {
                     style={styles.iconButton}
                     onPress={() => sendMessage(message)}
                 >
-                    <Ionicons name="send" size={24} color="#5F84A1" />
+                    <Ionicons name="send" size={24} color="#5B69D6" />
                 </TouchableOpacity>
             </View>
         </View>

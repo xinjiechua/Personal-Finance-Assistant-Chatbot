@@ -18,6 +18,10 @@ import * as shape from "d3-shape";
 import DonutChartContainer from "./Utils/DonutChart/DonutChartContainer";
 
 function Expenses_Main({ navigation }) {
+    const toChat = () => {
+        navigation.navigate("Chat");
+    };
+
     const toTransactionPage = () => {
         navigation.navigate("Expenses_Transaction");
     };
@@ -431,8 +435,12 @@ function Expenses_Main({ navigation }) {
                         />
                     </Svg>
                 </TouchableOpacity> */}
+
+
+
             </View>
         </ScrollView>
+
     );
 }
 

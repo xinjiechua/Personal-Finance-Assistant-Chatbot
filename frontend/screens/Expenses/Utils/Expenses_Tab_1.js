@@ -35,7 +35,7 @@ const Expenses_Tab_1 = ({
     formatDate,
     goBackToPreviousPage
 }) => {
-    const [paymentMethod, setPaymentMethod] = useState("cash");
+    const [paymentMethod, setPaymentMethod] = useState("Cash");
     const [userId, setUserId] = useState(1);
     const isExpense = category !== "Income/Salary";
 

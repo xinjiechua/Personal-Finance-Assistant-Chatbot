@@ -27,7 +27,7 @@ const Expenses_Tab_2 = ({
     formatDate,
     goBackToPreviousPage
 }) => {
-    const [paymentMethod, setPaymentMethod] = useState("cash"); // Assuming default payment method
+    const [paymentMethod, setPaymentMethod] = useState("Cash"); // Assuming default payment method
 
     const generateTransactionId = () => {
         const now = new Date();

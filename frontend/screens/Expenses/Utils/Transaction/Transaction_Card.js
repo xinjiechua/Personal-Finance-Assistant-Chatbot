@@ -6,7 +6,27 @@ import EntertainmentSVG from "./EntertainmentSVG";
 import FoodSVG from "./FoodSVG";
 import SalarySVG from "./SalarySVG";
 const Transaction_Card = ({ category, name, description, amount, time }) => {
-    const isExpense = category !== "Income/Salary";
+    const isExpense = category !== "Income/Salary" && category !== "Income" && category !== "Refund";
+
+    const getCategoryIcon = (category) => {
+        switch (category) {
+            case "Shopping":
+                return <ShoppingSVG />;
+            case "Entertainment":
+            case "Travel":
+                return <EntertainmentSVG />;
+            case "Dining":
+            case "Food":
+                return <FoodSVG />;
+            case "Income":
+            case "Income/Salary":
+            case "Refund":
+                return <SalarySVG />;
+            default:
+                return <ShoppingSVG />;
+        }
+    };
+
     return (
         <View
             style={[
@@ -18,25 +38,23 @@ const Transaction_Card = ({ category, name, description, amount, time }) => {
                 },
             ]}
         >
-            <View style={[styles.rowContainer]}>
-                {name === "Shopping" && <ShoppingSVG />}
-                {name === "Entertainment" && <EntertainmentSVG />}
-                {name === "Food" && <FoodSVG />}
-                {name === "Salary" && <SalarySVG />}
+            <View style={[styles.rowContainer, { flex: 1 }]}>
 
+                {getCategoryIcon(category)}
                 <View
                     style={[
                         styles.columnContainer,
-                        { marginLeft: 15 },
+                        { marginLeft: 15, flex: 1 },
                     ]}
                 >
-                    <Text style={[styles.cardTitle]}>
+                    <Text style={[styles.cardTitle]} numberOfLines={1}>
                         {name}
                     </Text>
                     <Text
                         style={[
                             styles.cardDescription,
                         ]}
+                        numberOfLines={2} // Limit description to two lines
                     >
                         {description}
                     </Text>
@@ -77,12 +95,19 @@ const styles = StyleSheet.create({
     cardTitle: {
         fontFamily: fonts.interSemiBold,
         color: colors.black,
-        fontSize: 15,
+        fontSize: 14,
     },
     cardDescription: {
         fontFamily: fonts.interRegular,
         color: "#91919F",
         fontSize: 13,
+        flexShrink: 1, // Ensure text shrinks to avoid pushing out other elements
+    },
+    // Ensure amount text has some space to "push" against if description is long
+    amount: {
+        fontFamily: fonts.interSemiBold,
+        fontSize: 13,
+        minWidth: sw(60), // Set a minimum width for the amount
     },
     rowContainer: {
         flexDirection: "row",
@@ -91,10 +116,6 @@ const styles = StyleSheet.create({
     columnContainer: {
         flexDirection: "column",
         justifyContent: "space-between",
-    },
-    amount: {
-        fontFamily: fonts.interSemiBold,
-        fontSize: 15,
     },
     rowContainer: { flexDirection: "row" },
     columnContainer: { flexDirection: "column" },
