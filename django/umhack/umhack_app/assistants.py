@@ -1,0 +1,161 @@
+from venv import create
+from django.http import JsonResponse
+import openai
+import time 
+import json
+from dotenv import load_dotenv
+import os
+from django.shortcuts import render
+from django.http import HttpResponse
+import json
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+load_dotenv()
+
+client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+
+# predefined assistant details
+model: str = "gpt-3.5-turbo-0125"
+assistant_name = "Finance Assistant"
+assistant_instruction = "You will read through the finance data of past transactions history of the user provided in the csv file and answer the user's question based on the given csv file. The csv file consists of column names: DATE,TRANSACTION_DETAILS,DESCRIPTION	CATEGORY,PAYMENT_METHOD,WITHDRAWAL_AMT,DEPOSIT_AMT. When performing calculation, always use code interpreter for any type of operations of calculation to ensure the accuracy of result."
+assistant_tools = [{"type": "code_interpreter"}, {
+    "type": "function",
+    "function":{    
+        "name": "get_data",
+        "description": "Get data from user finance database through performng SQL query and return the result. Get only the necessary data required to perform calculation/to answer the user's questions.", 
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "sql_query": {
+                    "type": "string",
+                    "description": "SQL query to get the data from the user finance database ie 'SELECT SUM(WITHDRAWAL_AMT) FROM data WHERE DATE BETWEEN '2021-01-01' AND '2021-12-31' AND CATEGORY='Grocery' AND PAYMENT_METHOD='Credit Card'"
+                },
+                "user_id": {
+                    "type": "string",
+                    "description": "User ID of the user whose data is to be fetched from the database"
+                }
+            },
+            "required": ["sql_query", "user_id"]
+        }   
+    }
+}]
+
+# assistant = client.beta.assistants.create(name=assistant_name, instructions=assistant_instruction, tools=assistant_tools, model=model)
+assistant = client.beta.assistants.retrieve(assistant_id="asst_IbFqFruhOkr9PRMPpxbi5f06")
+
+# functions to be called
+def get_data(sql_query, user_id):
+    return f"Data fetched for user {user_id} with query {sql_query}"
+
+class AssistantManager:
+    thread_id = None
+    
+    def __init__(self, thread_id):
+        self.client = client
+        self.assistant = assistant
+        self.thread = None
+        self.run = None
+        self.summary = None
+        print(f"ThreadID::: {thread_id}")
+        
+        if thread_id is None:
+            # Logic to create a new thread if one doesn't exist
+            print('Creating new thread')
+            self.create_thread()
+        else:
+            # Retrieve existing thread using the stored thread_id
+            self.thread = client.beta.threads.retrieve(thread_id=thread_id)
+
+    def create_thread(self):
+        if not self.thread:
+            thread_obj = self.client.beta.threads.create()
+            self.thread_id = thread_obj.id
+            self.thread = thread_obj
+            print(f"ThreadID::: {self.thread.id}")
+
+    def add_message_to_thread(self, role, content):
+        if self.thread:
+            self.client.beta.threads.messages.create(
+                thread_id=self.thread.id, role=role, content=content
+            )
+
+    def run_assistant(self, instructions):
+        if self.thread and self.assistant:
+            self.run = self.client.beta.threads.runs.create(
+                thread_id=self.thread.id,
+                assistant_id=self.assistant.id,
+                instructions=instructions,
+            )
+            
+    def process_message(self):
+        if self.thread:
+            messages = self.client.beta.threads.messages.list(thread_id=self.thread.id)
+            
+            for message in messages.data:
+                print(message.role, ' > ', message.content[0].__dict__.get('text').__dict__.get('value'))
+            
+            return messages.data[0].content[0].__dict__.get('text').__dict__.get('value')
+                
+    def retrieve_messages(self):
+        if self.thread:
+            messages = self.client.beta.threads.messages.list(thread_id=self.thread.id)
+            msg_list = []
+            
+            for message in messages.data:
+                role = message.role
+                msg = message.content[0].__dict__.get('text').__dict__.get('value')
+                msg_list.append([role, msg])
+                
+            return msg_list
+
+    def call_required_functions(self, required_actions):
+        if not self.run:
+            return
+        tool_outputs = []
+        
+        if self.thread:
+            for action in required_actions["tool_calls"]:
+                func_name = action["function"]["name"]
+                arguments = json.loads(action["function"]["arguments"])
+
+                if func_name == "get_data":
+                    output = get_data(sql_query=arguments["sql_query"], user_id=arguments["user_id"])
+                    print(f"OUTPUT:: {output}")
+
+                    tool_outputs.append({"tool_call_id": action["id"], "output": output})
+                else:
+                    raise ValueError(f"Unknown function: {func_name}")
+
+            print("Submitting outputs back to the Assistant...")
+            self.client.beta.threads.runs.submit_tool_outputs(
+                thread_id=self.thread.id, run_id=self.run.id, tool_outputs=tool_outputs
+            )
+            
+    def wait_for_completion(self):
+        if self.thread and self.run:
+            while True:
+                # time.sleep(5)
+                run_status = self.client.beta.threads.runs.retrieve(
+                    thread_id=self.thread.id, run_id=self.run.id
+                )
+                # print(f"RUN STATUS:: {run_status.model_dump_json(indent=4)}")
+
+                if run_status.status == "completed":
+                    return self.process_message()
+                    break
+                elif run_status.status == "requires_action" and run_status.required_action:
+                    print("FUNCTION CALLING NOW...")
+                    self.call_required_functions(
+                        required_actions=run_status.required_action.submit_tool_outputs.model_dump()
+                    )
+
+    # Run the steps
+    def run_steps(self):
+        if self.thread and self.run:
+            run_steps = self.client.beta.threads.runs.steps.list(
+                thread_id=self.thread.id, run_id=self.run.id
+            )
+            print(f"Run-Steps::: {run_steps}")
+            return run_steps.data
