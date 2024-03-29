@@ -14,24 +14,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Chat {
+model chat {
   id        Int       @id @default(autoincrement())
-  user      User      @relation(fields: [userId], references: [id])
-  userId    Int
-  messages  Message[] // Define one-to-many relationship with Message model
+  user      user      @relation(fields: [userid], references: [id])
+  userid    Int
+  messages  message[] // Define one-to-many relationship with Message model
 }
 
 
-model Message {
+model message {
   id        Int       @id @default(autoincrement())
-  chat      Chat      @relation(fields: [chatId], references: [id])
-  chatId    Int
-  chatMessage String
-  imageURI  String?   // Optional field for image URI
-  dateTime  DateTime
+  chat      chat      @relation(fields: [chatid], references: [id])
+  chatid    Int
+  chatmessage String
+  imageuri  String?   // Optional field for image URI
+  datetime  DateTime
 }
 
-model Transaction {
+model transaction {
   id        String     @id 
   date    DateTime
   transaction_details   String
@@ -40,15 +40,15 @@ model Transaction {
   payment_method    String
   withdrawal_amt    Float
   deposit_amt   Float
-  user    User   @relation(fields: [userId], references: [id])
-  userId  Int
+  user    user   @relation(fields: [userid], references: [id])
+  userid  Int
 }
 
-model User {
+model user {
   id    Int     @id @default(autoincrement())
   email String  @unique
   username  String @default("")
   password String
-  transactions Transaction[]
-  chats Chat[]
+  transactions transaction[]
+  chats chat[]
 }

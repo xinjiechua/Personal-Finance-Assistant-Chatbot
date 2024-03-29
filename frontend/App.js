@@ -1,11 +1,8 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+
 import GlobalState from './context';
 import AppNav from './navigation/AppNav';
 import { useFonts } from "expo-font";
-
 export default function App() {
-
 
   const [fontsLoaded, fontError] = useFonts({
     InterBlack: require("./assets/fonts/Inter-Bold.ttf"),
@@ -21,7 +18,6 @@ export default function App() {
   if (!fontsLoaded && !fontError) {
     return null;
   }
-
   return (
 
     <GlobalState>
@@ -30,11 +26,4 @@ export default function App() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+
