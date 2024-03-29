@@ -16,32 +16,7 @@ load_dotenv()
 client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
-# predefined assistant details
-model: str = "gpt-3.5-turbo-0125"
-assistant_name = "Finance Assistant"
-assistant_instruction = "You will read through the finance data of past transactions history of the user provided in the csv file and answer the user's question based on the given csv file. The csv file consists of column names: DATE,TRANSACTION_DETAILS,DESCRIPTION	CATEGORY,PAYMENT_METHOD,WITHDRAWAL_AMT,DEPOSIT_AMT. When performing calculation, always use code interpreter for any type of operations of calculation to ensure the accuracy of result."
-assistant_tools = [{"type": "code_interpreter"}, {
-    "type": "function",
-    "function":{    
-        "name": "get_data",
-        "description": "Get data from user finance database through performng SQL query and return the result. Get only the necessary data required to perform calculation/to answer the user's questions.", 
-        "parameters": {
-            "type": "object",
-            "properties": {
-                "sql_query": {
-                    "type": "string",
-                    "description": "SQL query to get the data from the user finance database ie 'SELECT SUM(WITHDRAWAL_AMT) FROM data WHERE DATE BETWEEN '2021-01-01' AND '2021-12-31' AND CATEGORY='Grocery' AND PAYMENT_METHOD='Credit Card'"
-                },
-                "user_id": {
-                    "type": "string",
-                    "description": "User ID of the user whose data is to be fetched from the database"
-                }
-            },
-            "required": ["sql_query", "user_id"]
-        }   
-    }
-}]
-
+# will be using same assistant for all users, so to create assistant, will use openai playground directly or use assistant_create.py
 # assistant = client.beta.assistants.create(name=assistant_name, instructions=assistant_instruction, tools=assistant_tools, model=model)
 assistant = client.beta.assistants.retrieve(assistant_id="asst_IbFqFruhOkr9PRMPpxbi5f06")
 
