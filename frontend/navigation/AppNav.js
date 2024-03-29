@@ -12,6 +12,9 @@ import { useContext } from "react";
 import { GlobalContext } from "../context";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
+import Expenses_Main from '../screens/Expenses/Expenses_Main';
+import Expenses_Add_1 from "../screens/Expenses/Expenses_Add_1";
+import Expenses_Transaction from "../screens/Expenses/Expenses_Transaction";
 
 function AppNav() {
     const { isAuth, setIsAuth } = useContext(GlobalContext);
@@ -31,15 +34,32 @@ function AppNav() {
     const ExpensesStack = createNativeStackNavigator();
     function ExpensesStackScreen() {
         return (
-            <ExpensesStack.Navigator screenOptions={{ headerShown: false }}>
+            <ExpensesStack.Navigator screenOptions={{ headerBackTitleVisible: false }}>
                 <ExpensesStack.Screen
-                    name="Expenses1"
-                    component={Expenses_Page_1}
+                    name="Expenses_Main"
+                    component={Expenses_Main}
+                    options={{
+                        title: 'Expenses',
+                        headerTitleAlign: 'center',
+                        headerBackTitle: '',
+                        headerShown: false
+                    }}
                 />
                 <ExpensesStack.Screen
-                    name="Expenses2"
-                    component={Expenses_Page_2}
+                    name="Expenses_Transaction"
+                    component={Expenses_Transaction}
+                    options={{
+                        title: 'Transaction',
+                        headerTitleAlign: 'center',
+                    }}
                 />
+
+                <ExpensesStack.Screen
+                    name="Expenses_Add_1"
+                    component={Expenses_Add_1}
+                    options={{ headerTitle: '', headerBackTitle: '' }}
+                />
+
             </ExpensesStack.Navigator>
         );
     }
@@ -83,7 +103,7 @@ function AppNav() {
                     name="Landing1"
                     component={Landing_Page_1}
                 />
-                <LandingStack.Screen name="Login" component={Login_Page} initialParams={{setIsAuth: setIsAuth}}/>
+                <LandingStack.Screen name="Login" component={Login_Page} initialParams={{ setIsAuth: setIsAuth }} />
                 <LandingStack.Screen name="SignUp" component={Signup_Page} />
             </LandingStack.Navigator>
         );
