@@ -55,4 +55,17 @@ export class TransactionsController {
   async getAllTransactions(@Param('userId', ParseIntPipe) userId) {
     return this.transactionService.getAll(userId);
   }
+
+  @Get(':userId/:year/:month')
+  async getTransactionsByMonth(
+    @Param('userId', ParseIntPipe) userId: number,
+    @Param('year', ParseIntPipe) year: number,
+    @Param('month', ParseIntPipe) month: number,
+  ) {
+    return this.transactionService.getTransactionsByMonth(userId, year, month);
+  }
+
+
+
 }
+

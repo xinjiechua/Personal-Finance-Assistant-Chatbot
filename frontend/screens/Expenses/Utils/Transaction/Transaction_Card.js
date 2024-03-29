@@ -5,6 +5,7 @@ import ShoppingSVG from "./ShoppingSVG";
 import EntertainmentSVG from "./EntertainmentSVG";
 import FoodSVG from "./FoodSVG";
 import SalarySVG from "./SalarySVG";
+
 const Transaction_Card = ({ category, name, description, amount, time }) => {
     const isExpense = category !== "Income/Salary" && category !== "Income" && category !== "Refund";
 

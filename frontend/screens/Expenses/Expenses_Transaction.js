@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
     ScrollView,
     StyleSheet,
@@ -9,6 +9,7 @@ import {
 import { SelectList } from "react-native-dropdown-select-list";
 import { Path, Svg, Ellipse, Rect } from "react-native-svg";
 import { sw, sh, fonts, colors } from "../../styles/GlobalStyles";
+import { useFocusEffect } from '@react-navigation/native';
 
 import DonutChartContainer from "./Utils/DonutChart/DonutChartContainer.js";
 import Transaction_Card from "./Utils/Transaction/Transaction_Card.js";
@@ -29,14 +30,16 @@ function Expenses_Transaction({ navigation }) {
         navigation.navigate("Expenses_Add_1");
     };
 
-    const fetchTransactions = async () => {
+    const fetchTransactions = async (year, month) => {
         try {
-            const response = await fetch('http://10.0.2.2:3000/transactions/1');
+
+            const url = `http://10.0.2.2:3000/transactions/1/${year}/${month + 1}`;
+            const response = await fetch(url);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
             const data = await response.json();
-            setTransactions(data); // Assuming data is an array of transactions
+            setTransactions(data);
         } catch (error) {
             console.error('Error fetching transactions:', error);
         }
@@ -44,6 +47,7 @@ function Expenses_Transaction({ navigation }) {
 
     // console.log(card_details_today);
 
+    const [currentDate, setCurrentDate] = useState(new Date());
     const [transactionsByDate, setTransactionsByDate] = useState({});
 
     const categorizeTransactions = (allTransactions) => {
@@ -73,15 +77,20 @@ function Expenses_Transaction({ navigation }) {
         setTransactionsByDate(sorted);
     };
 
-    // Modify the useEffect that fetches the transactions
     useEffect(() => {
-        const fetchData = async () => {
-            await fetchTransactions(); // Fetch and set to `transactions`
-        };
-        fetchData();
-    }, []);
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth();
+        fetchTransactions(year, month);
+    }, [currentDate]);
 
-    // New useEffect to sort transactions after fetching
+    useFocusEffect(
+        useCallback(() => {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            fetchTransactions(year, month);
+        }, [currentDate])
+    );
+
     useEffect(() => {
         if (transactions.length) {
             categorizeTransactions(transactions);
@@ -95,7 +104,14 @@ function Expenses_Transaction({ navigation }) {
             if (b === 'Today') return 1;
             if (a === 'Yesterday') return -1;
             if (b === 'Yesterday') return 1;
-            return new Date(b) - new Date(a);
+
+            const aSplit = a.split('/');
+            const bSplit = b.split('/');
+            const aDate = new Date(`${aSplit[2]}-${aSplit[1]}-${aSplit[0]}`);
+            const bDate = new Date(`${bSplit[2]}-${bSplit[1]}-${bSplit[0]}`);
+            return bDate - aDate;
+
+
         });
 
         return sortedDates.map((date) => (
@@ -115,7 +131,26 @@ function Expenses_Transaction({ navigation }) {
         ));
     };
 
+    // Function to format the displayed month and year string
+    const formatMonthYear = (date) => {
+        return date.toLocaleString('default', { month: 'long' }) + ' ' + date.getFullYear();
+    };
 
+    // Function to navigate to the previous month
+    const goToPreviousMonth = () => {
+        setCurrentDate((prevDate) => {
+            const newDate = new Date(prevDate.getFullYear(), prevDate.getMonth() - 1, 1);
+            return newDate;
+        });
+    };
+
+    // Function to navigate to the next month
+    const goToNextMonth = () => {
+        setCurrentDate((prevDate) => {
+            const newDate = new Date(prevDate.getFullYear(), prevDate.getMonth() + 1, 1);
+            return newDate;
+        });
+    };
 
 
 
@@ -147,113 +182,46 @@ function Expenses_Transaction({ navigation }) {
                         },
                     ]}
                 >
-                    <View
-                        style={[
-                            styles.rowContainer,
-                            {
-                                marginHorizontal: sw(20),
-                                gap: 10,
-                            },
-                        ]}
+                    {/* Left Button */}
+                    <TouchableOpacity onPress={goToPreviousMonth}
+                        style={{
+                            height: sh(40),
+                            width: sw(30),
+                            borderColor: "#5B69D6",
+                            borderWidth: 1,
+                            borderRadius: 5,
+                            alignItems: "center",
+                            justifyContent: "center",
+                        }}
                     >
-                        <View
-                            style={{
-                                height: sh(40),
-                                width: sw(30),
+                        <Svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} fill="none">
+                            <Path stroke="#5B69D6" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m15 6-6 6 6 6" />
+                        </Svg>
+                    </TouchableOpacity>
 
-                                borderColor: "#5B69D6",
-                                borderWidth: 1,
-                                borderRadius: 5,
-                                alignItems: "center",
-                            }}
-                        >
-                            <TouchableOpacity
-                                style={{
-                                    borderRadius: 5,
-                                    alignItems: "center",
-                                    justifyContent: "center",
+                    <Text style={{ alignSelf: "center", fontSize: 20, color: "#5B69D6" }}>
+                        {formatMonthYear(currentDate)}
+                    </Text>
 
-                                    height: sh(40),
-                                    width: sw(30),
-                                }}
-                            >
-                                <Svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width={24}
-                                    height={24}
-                                    fill="none"
-                                >
-                                    <Path
-                                        stroke="#5B69D6"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="m15 6-6 6 6 6"
-                                    />
-                                </Svg>
-                            </TouchableOpacity>
-                        </View>
-
-                        <Text
-                            style={[
-                                styles.cardDescription,
-                                {
-                                    color: "#5B69D6",
-                                    fontSize: 20,
-
-                                    alignSelf: "center",
-                                },
-                            ]}
-                        >
-                            {/* {currentMonth} */}
-                            Mac 2024
-                        </Text>
-
-                        <View
-                            style={{
-                                height: sh(40),
-                                width: sw(30),
-
-                                borderColor: "#5B69D6",
-                                borderWidth: 1,
-                                borderRadius: 5,
-                                alignItems: "center",
-                            }}
-                        >
-                            <TouchableOpacity
-                                style={{
-                                    borderRadius: 5,
-                                    alignItems: "center",
-                                    justifyContent: "center",
-
-                                    height: sh(40),
-                                    width: sw(30),
-                                }}
-                            >
-                                <Svg
-                                    style={{ position: "absolute" }}
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width={24}
-                                    height={24}
-                                    fill="none"
-                                >
-                                    <Path
-                                        stroke="#5B69D6"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="m9 18 6-6-6-6"
-                                    />
-                                </Svg>
-                            </TouchableOpacity>
-                        </View>
-
-
-
-                    </View>
+                    {/* Right Button */}
+                    <TouchableOpacity onPress={goToNextMonth}
+                        style={{
+                            height: sh(40),
+                            width: sw(30),
+                            borderColor: "#5B69D6",
+                            borderWidth: 1,
+                            borderRadius: 5,
+                            alignItems: "center",
+                            justifyContent: "center",
+                        }}
+                    >
+                        <Svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} fill="none">
+                            <Path stroke="#5B69D6" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m9 18 6-6-6-6" />
+                        </Svg>
+                    </TouchableOpacity>
                 </View>
 
-                <View
+                {/* <View
                     style={{ position: "absolute", right: 0, top: 55, zIndex: 999 }}
                 >
                     <SelectList
@@ -288,7 +256,7 @@ function Expenses_Transaction({ navigation }) {
                         }}
                         defaultOption={{ key: "1", value: "Expenses" }}
                     />
-                </View>
+                </View> */}
 
 
 
