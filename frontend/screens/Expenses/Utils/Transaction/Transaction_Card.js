@@ -14,6 +14,8 @@ const Transaction_Card = ({ category, name, description, amount, time }) => {
             case "Shopping":
                 return <ShoppingSVG />;
             case "Entertainment":
+            case "Other Expenses":
+            case "Government Services":
             case "Travel":
                 return <EntertainmentSVG />;
             case "Dining":
