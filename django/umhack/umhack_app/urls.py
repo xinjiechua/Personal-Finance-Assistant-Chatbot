@@ -10,8 +10,13 @@ urlpatterns = [
     # expected data from frontend:
     #     method: 'POST',
     #     body:{
-    #             "thread_id": "thread_2pW1ODo2IyUiX9tYpfsqlW79", (user value
+    #             "thread_id": "thread_2pW1ODo2IyUiX9tYpfsqlW79", (user value)
     #             "message": "Hi what is your name?" (user value)
     #         }
     path('chatbot/retrieve_message', views.retrieve_message, name='retrieve_message'),
+    # expected data from frontend:
+    #     method: 'GET',
+    #     body:{
+    #             "thread_id": "thread_2pW1ODo2IyUiX9tYpfsqlW79", (user value)
+    #         }
 ]

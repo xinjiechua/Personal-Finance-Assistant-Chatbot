@@ -10,44 +10,30 @@ from django.http import HttpResponse
 import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from .db import execute_query
 
 load_dotenv()
 
 client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
-# predefined assistant details
-model: str = "gpt-3.5-turbo-0125"
-assistant_name = "Finance Assistant"
-assistant_instruction = "You will read through the finance data of past transactions history of the user provided in the csv file and answer the user's question based on the given csv file. The csv file consists of column names: DATE,TRANSACTION_DETAILS,DESCRIPTION	CATEGORY,PAYMENT_METHOD,WITHDRAWAL_AMT,DEPOSIT_AMT. When performing calculation, always use code interpreter for any type of operations of calculation to ensure the accuracy of result."
-assistant_tools = [{"type": "code_interpreter"}, {
-    "type": "function",
-    "function":{    
-        "name": "get_data",
-        "description": "Get data from user finance database through performng SQL query and return the result. Get only the necessary data required to perform calculation/to answer the user's questions.", 
-        "parameters": {
-            "type": "object",
-            "properties": {
-                "sql_query": {
-                    "type": "string",
-                    "description": "SQL query to get the data from the user finance database ie 'SELECT SUM(WITHDRAWAL_AMT) FROM data WHERE DATE BETWEEN '2021-01-01' AND '2021-12-31' AND CATEGORY='Grocery' AND PAYMENT_METHOD='Credit Card'"
-                },
-                "user_id": {
-                    "type": "string",
-                    "description": "User ID of the user whose data is to be fetched from the database"
-                }
-            },
-            "required": ["sql_query", "user_id"]
-        }   
-    }
-}]
-
+# will be using same assistant for all users, so to create assistant, will use openai playground directly or use assistant_create.py
 # assistant = client.beta.assistants.create(name=assistant_name, instructions=assistant_instruction, tools=assistant_tools, model=model)
 assistant = client.beta.assistants.retrieve(assistant_id="asst_IbFqFruhOkr9PRMPpxbi5f06")
 
 # functions to be called
-def get_data(sql_query, user_id):
-    return f"Data fetched for user {user_id} with query {sql_query}"
+def get_data(sql_query, userId):
+    # return f"Data fetched for user {userId} with query {sql_query}"
+    print(f"SQL_QUERY::: {sql_query}")
+    print(f"SQL_QUERY::: {sql_query}")
+    print(f"SQL_QUERY::: {sql_query}")
+    # Assuming execute_query returns a list of dictionaries
+    query_result = execute_query(sql_query)
+    
+    # Convert the result into a JSON string
+    result_string = json.dumps(query_result)
+    
+    return result_string
 
 class AssistantManager:
     thread_id = None
@@ -121,10 +107,13 @@ class AssistantManager:
                 arguments = json.loads(action["function"]["arguments"])
 
                 if func_name == "get_data":
-                    output = get_data(sql_query=arguments["sql_query"], user_id=arguments["user_id"])
+                    output = get_data(sql_query=arguments["sql_query"], userId=arguments["userId"])
                     print(f"OUTPUT:: {output}")
 
                     tool_outputs.append({"tool_call_id": action["id"], "output": output})
+                elif func_name == "data_visualisation":
+                    print(arguments)
+                    tool_outputs.append({"tool_call_id": action["id"], "output": "visualisation done"})
                 else:
                     raise ValueError(f"Unknown function: {func_name}")
 
@@ -136,7 +125,7 @@ class AssistantManager:
     def wait_for_completion(self):
         if self.thread and self.run:
             while True:
-                # time.sleep(5)
+                time.sleep(5)
                 run_status = self.client.beta.threads.runs.retrieve(
                     thread_id=self.thread.id, run_id=self.run.id
                 )
