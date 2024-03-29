@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import * as csvParser from 'csv-parser'; // Import csv-parser
-import { Transaction } from '@prisma/client';
+import { transaction } from '@prisma/client';
 
 @Injectable()
 export class TransactionsService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) { }
 
   async processCsv(csvData: string) {
     const parsedData = await this.parseCsvData(csvData);
@@ -37,11 +37,11 @@ export class TransactionsService {
     deposit_amount: number;
     userId: number;
   }) {
-      return this.prismaService.transaction.create({
-        
+    return this.prismaService.transaction.create({
+
       data: {
         id: transactionData.id,
-        userId: transactionData.userId,
+        userid: transactionData.userId,
         date: transactionData.date,
         transaction_details: transactionData.transaction_details,
         description: transactionData.description,
@@ -52,8 +52,8 @@ export class TransactionsService {
       },
     });
   }
-    
-    async getAll(userId: number): Promise<Transaction[]> {
-        return this.prismaService.transaction.findMany({ where: { userId: userId } });
-    }
+
+  async getAll(userId: number): Promise<transaction[]> {
+    return this.prismaService.transaction.findMany({ where: { userid: userId } });
+  }
 }
