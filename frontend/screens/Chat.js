@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     View,
     Text,
@@ -9,6 +9,7 @@ import {
     StyleSheet,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { TypingAnimation } from "react-native-typing-animation";
 
 import { colors, fonts, sh, sw } from "../styles/GlobalStyles";
 
@@ -52,6 +53,10 @@ const Chat = ({ navigation }) => {
         //     isSender: false,
         // },
     ];
+
+    const [recommend1Message, setRecommend1Message] = useState("Question 1...");
+    const [recommend2Message, setRecommend2Message] = useState("Question 2...");
+    const [recommend3Message, setRecommend3Message] = useState("Question 3...");
     const [message, setMessage] = useState("");
     const [messages, setMessages] = useState([
         // {
@@ -67,8 +72,9 @@ const Chat = ({ navigation }) => {
         //     isSender: false,
         // },
     ]);
-
-    const sendMessage = () => {
+    const [botTurn, setBotTurn] = useState(true);
+    const [loading, setLoading] = useState(false);
+    const sendMessage = (message) => {
         if (message.trim()) {
             const newMessage = {
                 id: messages.length + 1,
@@ -79,9 +85,51 @@ const Chat = ({ navigation }) => {
                 }),
                 isSender: true,
             };
-            setMessages([...messages, newMessage]);
+            setMessages((prevMessages) => [...prevMessages, newMessage]);
+            console.log("send", messages);
             setMessage("");
+
+            setChatInit(false);
+
+            setBotTurn(true);
+            setLoading(true);
+            // setTimeout(makeResponse, 3000);
         }
+    };
+
+    const makeResponse = () => {
+        const newMessage = {
+            id: messages.length + 1,
+            text: "This is an automated response to: ",
+            time: new Date().toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+            }),
+            isSender: false,
+        };
+        setBotTurn(false);
+        setMessages((prevMessages) => [...prevMessages, newMessage]);
+        setLoading(false);
+        console.log("receive", messages);
+    };
+
+    useEffect(() => {
+        if (messages.length > 0 && botTurn) {
+            const timer = setTimeout(makeResponse, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [messages]);
+
+    const selectRecommend1 = () => {
+        sendMessage(recommend1Message);
+    };
+
+    const selectRecommend2 = () => {
+        sendMessage(recommend2Message);
+    };
+
+    const selectRecommend3 = () => {
+        sendMessage(recommend3Message);
     };
 
     return (
@@ -113,6 +161,32 @@ const Chat = ({ navigation }) => {
                         {msg.text.includes("we proposed:")}
                     </View>
                 ))}
+                {loading && (
+                    <View
+                        style={[
+                            styles.messageBubble,
+                            styles.receiver,
+                            {
+                                alignItems: "center",
+                            },
+                        ]}
+                    >
+                        <TypingAnimation
+                            style={{
+                                borderColor: "black",
+                                // borderWidth: 1,
+                                padding: 7,
+                            }}
+                            dotColor="#5B69D6"
+                            dotMargin={5}
+                            dotAmplitude={3}
+                            dotSpeed={0.15}
+                            dotRadius={2.5}
+                            dotX={12}
+                            dotY={6}
+                        />
+                    </View>
+                )}
                 {chatInit &&
                     chatInitMessage.map((msg, index) => (
                         <View key={msg.id}>
@@ -132,64 +206,72 @@ const Chat = ({ navigation }) => {
                                 >
                                     {msg.text}
                                 </Text>
-                                <View
-                                    style={{
-                                        marginBottom: sh(10),
-                                        paddingHorizontal: sw(20),
-                                        paddingVertical: sh(5),
-                                        borderRadius: 10,
-                                        borderWidth: 1,
-                                        borderColor: "#9F97F7",
-                                    }}
-                                >
-                                    <Text
-                                        style={[
-                                            styles.messageText,
-                                            { color: "#9F97F7" },
-                                        ]}
-                                    >
-                                        Question 1...
-                                    </Text>
-                                </View>
 
-                                <View
-                                    style={{
-                                        marginBottom: sh(10),
-                                        paddingHorizontal: sw(20),
-                                        paddingVertical: sh(5),
-                                        borderRadius: 10,
-                                        borderWidth: 1,
-                                        borderColor: "#9F97F7",
-                                    }}
-                                >
-                                    <Text
-                                        style={[
-                                            styles.messageText,
-                                            { color: "#9F97F7" },
-                                        ]}
+                                <TouchableOpacity onPress={selectRecommend1}>
+                                    <View
+                                        style={{
+                                            marginBottom: sh(10),
+                                            paddingHorizontal: sw(20),
+                                            paddingVertical: sh(5),
+                                            borderRadius: 10,
+                                            borderWidth: 1,
+                                            borderColor: "#9F97F7",
+                                        }}
                                     >
-                                        Question 2...
-                                    </Text>
-                                </View>
-                                <View
-                                    style={{
-                                        marginBottom: sh(10),
-                                        paddingHorizontal: sw(20),
-                                        paddingVertical: sh(5),
-                                        borderRadius: 10,
-                                        borderWidth: 1,
-                                        borderColor: "#9F97F7",
-                                    }}
-                                >
-                                    <Text
-                                        style={[
-                                            styles.messageText,
-                                            { color: "#9F97F7" },
-                                        ]}
+                                        <Text
+                                            style={[
+                                                styles.messageText,
+                                                { color: "#9F97F7" },
+                                            ]}
+                                        >
+                                            {recommend1Message}
+                                        </Text>
+                                    </View>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity onPress={selectRecommend2}>
+                                    <View
+                                        style={{
+                                            marginBottom: sh(10),
+                                            paddingHorizontal: sw(20),
+                                            paddingVertical: sh(5),
+                                            borderRadius: 10,
+                                            borderWidth: 1,
+                                            borderColor: "#9F97F7",
+                                        }}
                                     >
-                                        Question 3...
-                                    </Text>
-                                </View>
+                                        <Text
+                                            style={[
+                                                styles.messageText,
+                                                { color: "#9F97F7" },
+                                            ]}
+                                        >
+                                            {recommend2Message}
+                                        </Text>
+                                    </View>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity onPress={selectRecommend3}>
+                                    <View
+                                        style={{
+                                            marginBottom: sh(10),
+                                            paddingHorizontal: sw(20),
+                                            paddingVertical: sh(5),
+                                            borderRadius: 10,
+                                            borderWidth: 1,
+                                            borderColor: "#9F97F7",
+                                        }}
+                                    >
+                                        <Text
+                                            style={[
+                                                styles.messageText,
+                                                { color: "#9F97F7" },
+                                            ]}
+                                        >
+                                            {recommend3Message}
+                                        </Text>
+                                    </View>
+                                </TouchableOpacity>
                                 <Text style={styles.messageTime}>
                                     {msg.time}
                                 </Text>
@@ -206,11 +288,11 @@ const Chat = ({ navigation }) => {
                     value={message}
                     onChangeText={setMessage}
                     placeholder="Type a message"
-                    onSubmitEditing={sendMessage}
+                    onSubmitEditing={() => sendMessage(message)}
                 />
                 <TouchableOpacity
                     style={styles.iconButton}
-                    onPress={sendMessage}
+                    onPress={() => sendMessage(message)}
                 >
                     <Ionicons name="send" size={24} color="#5F84A1" />
                 </TouchableOpacity>
