@@ -15,6 +15,7 @@ import { colors, sw, sh, fonts } from "../../../styles/GlobalStyles.js";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Keyboard } from "react-native";
 import { Picker } from '@react-native-picker/picker';
+import { IP_ADD } from "../../../url.js";
 
 
 
@@ -66,7 +67,7 @@ const Expenses_Tab_1 = ({
 
         try {
             // Your API call here, replace `yourApiEndpoint` with your actual endpoint
-            const response = await fetch('http://10.0.2.2:3000/transactions/insert/1', {
+            const response = await fetch(`http://${IP_ADD}:3000/transactions/insert/1`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

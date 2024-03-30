@@ -49,7 +49,7 @@ function AppNav() {
         tabBarActiveTintColor: tabBarOptions.activeTintColor,
         tabBarInactiveTintColor: tabBarOptions.inactiveTintColor,
         tabBarStyle: tabBarOptions.style,
-        tabBarHideOnKeyboard: tabBarOptions.tabBarHideOnKeyboard,
+        // tabBarHideOnKeyboard: tabBarOptions.tabBarHideOnKeyboard,
         headerShown: false,
     });
 
@@ -63,7 +63,7 @@ function AppNav() {
             height: 60, // Height of the bottom navigation bar
             paddingBottom: 10, // Additional padding at the bottom
         },
-        tabBarHideOnKeyboard: true,
+        // tabBarHideOnKeyboard: { tabBarHideOnKeyboard: true },
     };
 
     function HomeStackScreen() {
@@ -87,6 +87,7 @@ function AppNav() {
                         // presentation: "modal",
                         headerBackTitle: "back",
                         headerBackTitleVisible: true,
+                        tabBarVisible: false,
                     }}
                 />
                 {/* <ExpensesStack.Screen
@@ -188,7 +189,7 @@ function AppNav() {
                     component={Login_Page}
                     initialParams={{ setIsAuth: setIsAuth }}
                 />
-                
+
                 <LandingStack.Screen name="SignUp" component={Signup_Page} />
             </LandingStack.Navigator>
         );
@@ -211,7 +212,7 @@ function AppNav() {
                         screenOptions={screenOptions}
                     />
                     <Tab.Screen name="Record" component={ExpensesStackScreen} />
-                    
+
                     <Tab.Screen name="Profile" component={ProfileStackScreen} />
                 </Tab.Navigator>
             )}

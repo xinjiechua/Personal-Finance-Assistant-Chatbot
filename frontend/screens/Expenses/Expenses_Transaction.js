@@ -30,6 +30,7 @@ function Expenses_Transaction({ navigation }) {
     const toAddBudget = () => {
         navigation.navigate("Expenses_Add_1");
     };
+    
 
     const fetchTransactions = async (year, month) => {
         try {

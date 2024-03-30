@@ -14,7 +14,6 @@ import { Keyboard } from "react-native";
 import Expenses_Tab_1 from "./Utils/Expenses_Tab_1";
 import Expenses_Tab_2 from "./Utils/Expenses_Tab_2";
 const Expenses_Add_1 = ({ navigation, route }) => {
-
     //state of each tab
     const [isPressed1, setIsPressed1] = useState(true);
     const [isPressed2, setIsPressed2] = useState(false);
@@ -28,7 +27,6 @@ const Expenses_Add_1 = ({ navigation, route }) => {
     const [amount, setAmount] = useState("");
     const [description, setDescription] = useState("");
 
-
     const openCalendar = () => {
         setOpenDate(true);
     };
@@ -40,10 +38,11 @@ const Expenses_Add_1 = ({ navigation, route }) => {
     };
 
     const formatDate = (date) => {
-        let formattedDate = new Intl.DateTimeFormat("en-GB", {
+        let formattedDate = new Intl.DateTimeFormat("en-MY", {
             day: "2-digit",
             month: "2-digit",
             year: "numeric",
+            timeZone: "Asia/Kuala_Lumpur",
         }).format(date);
 
         return formattedDate;
@@ -125,10 +124,9 @@ const Expenses_Add_1 = ({ navigation, route }) => {
         closeCalendar();
     };
 
-
     const goBackToPreviousPage = () => {
         navigation.goBack();
-    }
+    };
 
     useEffect(() => {
         if (route.params && route.params.transactionDetails) {
@@ -141,19 +139,17 @@ const Expenses_Add_1 = ({ navigation, route }) => {
             setDescription(transactionDetails.description);
             setAmount(transactionDetails.amount);
         }
-
-
     });
     return (
         <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
             style={styles.wrapper}
         >
             <TouchableWithoutFeedback onPress={dismissKeyboard}>
                 <View
                     style={{
                         backgroundColor: colors.white,
-                        height: '100%',
+                        height: "100%",
                     }}
                 >
                     <View
@@ -169,17 +165,16 @@ const Expenses_Add_1 = ({ navigation, route }) => {
                             style={[
                                 styles.rowContainer,
                                 {
-                                    justifyContent: 'flex-end',
+                                    justifyContent: "flex-end",
                                     marginTop: sh(10),
                                 },
                             ]}
-                        >
-                        </View>
+                        ></View>
                         <View
                             style={[
                                 styles.rowContainer,
                                 {
-                                    alignSelf: 'center',
+                                    alignSelf: "center",
                                     marginVertical: sh(10),
                                 },
                             ]}
@@ -189,29 +184,35 @@ const Expenses_Add_1 = ({ navigation, route }) => {
                                     style={
                                         isPressed1
                                             ? [
-                                                styles.tabContainer,
-                                                {
-                                                    borderTopRightRadius: 0,
-                                                    borderBottomRightRadius: 0,
-                                                    borderColor: '#5B69D6',
-                                                    borderWidth: 1,
-                                                },
-                                            ]
+                                                  styles.tabContainer,
+                                                  {
+                                                      borderTopRightRadius: 0,
+                                                      borderBottomRightRadius: 0,
+                                                      borderColor: "#5B69D6",
+                                                      borderWidth: 1,
+                                                  },
+                                              ]
                                             : [
-                                                styles.tabContainer,
-                                                {
-                                                    borderColor: '#5B69D6',
-                                                    borderWidth: 1,
-                                                    backgroundColor: colors.white,
-                                                    borderTopRightRadius: 0,
-                                                    borderBottomRightRadius: 0,
-                                                },
-                                            ]
+                                                  styles.tabContainer,
+                                                  {
+                                                      borderColor: "#5B69D6",
+                                                      borderWidth: 1,
+                                                      backgroundColor:
+                                                          colors.white,
+                                                      borderTopRightRadius: 0,
+                                                      borderBottomRightRadius: 0,
+                                                  },
+                                              ]
                                     }
                                 >
                                     <Text
                                         style={
-                                            isPressed1 ? [styles.tabTitle, { color: colors.white }] : [styles.tabTitle]
+                                            isPressed1
+                                                ? [
+                                                      styles.tabTitle,
+                                                      { color: colors.white },
+                                                  ]
+                                                : [styles.tabTitle]
                                         }
                                     >
                                         Expenses
@@ -224,30 +225,36 @@ const Expenses_Add_1 = ({ navigation, route }) => {
                                     style={
                                         isPressed2
                                             ? [
-                                                styles.tabContainer,
-                                                {
-                                                    borderTopLeftRadius: 0,
-                                                    borderBottomLeftRadius: 0,
-                                                    borderColor: '#5B69D6',
-                                                    borderWidth: 1,
-                                                },
-                                            ]
+                                                  styles.tabContainer,
+                                                  {
+                                                      borderTopLeftRadius: 0,
+                                                      borderBottomLeftRadius: 0,
+                                                      borderColor: "#5B69D6",
+                                                      borderWidth: 1,
+                                                  },
+                                              ]
                                             : [
-                                                styles.tabContainer,
-                                                {
-                                                    backgroundColor: colors.white,
-                                                    borderColor: '#5B69D6',
-                                                    borderWidth: 1,
+                                                  styles.tabContainer,
+                                                  {
+                                                      backgroundColor:
+                                                          colors.white,
+                                                      borderColor: "#5B69D6",
+                                                      borderWidth: 1,
 
-                                                    borderTopLeftRadius: 0,
-                                                    borderBottomLeftRadius: 0,
-                                                },
-                                            ]
+                                                      borderTopLeftRadius: 0,
+                                                      borderBottomLeftRadius: 0,
+                                                  },
+                                              ]
                                     }
                                 >
                                     <Text
                                         style={
-                                            isPressed2 ? [styles.tabTitle, { color: colors.white }] : [styles.tabTitle]
+                                            isPressed2
+                                                ? [
+                                                      styles.tabTitle,
+                                                      { color: colors.white },
+                                                  ]
+                                                : [styles.tabTitle]
                                         }
                                     >
                                         Income

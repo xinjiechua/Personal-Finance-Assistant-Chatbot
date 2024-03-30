@@ -11,6 +11,7 @@ import React, { useState } from "react";
 import { colors, sw, sh, fonts } from "../../../styles/GlobalStyles.js";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Keyboard } from "react-native";
+import { IP_ADD } from "../../../url.js";
 
 const Expenses_Tab_2 = ({
     openCalendar,
@@ -57,7 +58,7 @@ const Expenses_Tab_2 = ({
         };
 
         try {
-            const response = await fetch('http://10.0.2.2:3000/transactions/insert/1', {
+            const response = await fetch(`http://${IP_ADD}3000/transactions/insert/1`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

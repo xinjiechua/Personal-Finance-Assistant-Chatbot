@@ -52,6 +52,7 @@ const LineChartComponent = () => {
 
     // Mapping the week numbers to months for xAxisLabels
     const xAxisLabels = weekNumbers.map((week) => {
+        // console.log(week)
         // Assuming week format is "YYYY-Wn", extract the week number and year
         const [year, weekNumber] = week.split("-W");
         // Convert the week number to a month (assuming each month has 4 weeks)

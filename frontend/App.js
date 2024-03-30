@@ -1,9 +1,10 @@
 
+import { LogBox } from 'react-native';
 import GlobalState from './context';
 import AppNav from './navigation/AppNav';
 import { useFonts } from "expo-font";
 export default function App() {
-
+  LogBox.ignoreAllLogs();
   const [fontsLoaded, fontError] = useFonts({
       InterBlack: require("./assets/fonts/Inter-Bold.ttf"),
       InterExtraLight: require("./assets/fonts/Inter-ExtraLight.ttf"),

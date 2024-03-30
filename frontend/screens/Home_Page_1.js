@@ -233,7 +233,7 @@ function Home_Page_1({ navigation }) {
                         Trend Analysis
                     </Text>
 
-                    <TouchableOpacity onPress={toTransactionPage}>
+                    {/* <TouchableOpacity onPress={toTransactionPage}>
                         <Text
                             style={[
                                 {
@@ -245,7 +245,7 @@ function Home_Page_1({ navigation }) {
                         >
                             See All
                         </Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
 
                 <View style={[styles.chartContainer]}>
