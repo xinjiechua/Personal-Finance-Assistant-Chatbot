@@ -37,10 +37,10 @@ def send_message(request):
         # Add message to thread
         manager.add_message_to_thread('user', data.get('message'))
         manager.run_assistant(f"userId is {data.get('userId')}")
-        responded_message = manager.wait_for_completion()
+        response = manager.wait_for_completion()
         # manager.run_steps() # print run steps for debugging
         
-        return JsonResponse({"success": "Message sent successfully", "responded_message": responded_message}, status=200)
+        return JsonResponse({"success": "Message sent successfully", "responded_message": response['last_message'], "data_visualisation_response": response["data_visualisation_response"], "forecast_visualisation_response": response["forecast_visualisation_response"]}, status=200)
     else:
         return JsonResponse({"error": "Invalid request method"}, status=400)
     
