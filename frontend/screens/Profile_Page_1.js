@@ -23,7 +23,7 @@ function Profile_Page_1({ navigation, route }) {
     };
 
     if (currentUsername == "") {
-        setCurrentUsername("Jason");
+        setCurrentUsername("Ahmad");
     }
 
     const ProfileEditPage = () => {
@@ -142,7 +142,8 @@ const styles = StyleSheet.create({
     },
     upperHalfCircle: {
         position: "absolute",
-        top: sh(-650),
+        // top: sh(-650),
+        top: sh(-720),
         left: sw(-200), // left must be the 1/4 of the total width
         width: sw(800),
         aspectRatio: 1,
@@ -185,12 +186,14 @@ const styles = StyleSheet.create({
     buttonText: {
         fontSize: sw(18),
         fontFamily: fonts.interSemiBold,
-        color: "black",
+        color: "#ff9C9C",
     },
     footer: {
         flex: 1,
         flexDirection: "row",
-        backgroundColor: "#F6F7FA",
+        backgroundColor: "#FFF4F4",
+        borderColor: "#ff9C9C",
+        borderWidth: 1,
         margin: sw(20),
         paddingVertical: sh(20),
         borderRadius: sw(10),

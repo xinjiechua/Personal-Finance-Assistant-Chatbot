@@ -10,21 +10,26 @@ const BarChartComponent = () => {
     const [labelData, setLabelData] = useState([]);
     const userId = "1";
     const colors = [
-        "#E5D8FF",
-        "#FFF0D4",
-        "#FDCED0",
-        "#CAFDEA",
-        "#BCDAFC",
-        "#FFD8D8",
-        "#FFE5D9",
-        "#FFF3D9",
-        "#D7E4FF",
-        "#C6F1E7",
-        "#D4F9DC",
-        "#FFEEDD",
-        "#FFDEE9",
-        "#FFD8D8",
-        "#F4F4F4",
+        "#5b69d6",
+        "#9197c8",
+        "#9bb7d9",
+        "#9adcff",
+        "#3edad8",
+        // "#E5D8FF",
+        // "#FFF0D4",
+        // "#FDCED0",
+        // "#CAFDEA",
+        // "#BCDAFC",
+        // "#FFD8D8",
+        // "#FFE5D9",
+        // "#FFF3D9",
+        // "#D7E4FF",
+        // "#C6F1E7",
+        // "#D4F9DC",
+        // "#FFEEDD",
+        // "#FFDEE9",
+        // "#FFD8D8",
+        // "#F4F4F4",
     ];
 
     const fetchData = async () => {
@@ -42,7 +47,8 @@ const BarChartComponent = () => {
 
             const processedData = fetchedData
                 .map((item, index) => ({
-                    value: (item.totalAmount / totalAmount) * 100,
+                    // value: (item.totalAmount / totalAmount) * 100,
+                    value: item.totalAmount / 1000,
                     label: item.category,
                     frontColor: colors[index % colors.length],
                 }))

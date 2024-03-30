@@ -79,24 +79,26 @@ const LineChartComponent = () => {
                         { color: colors.black, fontSize: 18, flex: 1 },
                     ]}
                 >
-                    Expenses
+                    Expenses (RM)
                 </Text>
                 <LineChart
                     areaChart
                     curved
                     data={lineData1}
+                    stepValue={7000}
+                    // maxValue={8000}
                     // data2={lineData2}
                     height={300}
                     showVerticalLines
                     spacing={50}
                     initialSpacing={0}
-                    color1="orange"
+                    color1="#5b69d6"
                     // color2="orange"
                     textColor1="green"
                     // hideDataPoints
                     yAxisLabelWidth={50}
-                    dataPointsColor1="red"
-                    startFillColor1="orange"
+                    dataPointsColor1="#5b69d6"
+                    startFillColor1="#5b69d6"
                     // startFillColor2="orange"
                     startOpacity={0.8}
                     endOpacity={0.3}
@@ -118,26 +120,26 @@ const LineChartComponent = () => {
                         { color: colors.black, fontSize: 18, flex: 1 },
                     ]}
                 >
-                    Income
+                    Income (RM)
                 </Text>
                 <LineChart
                     areaChart
                     curved
                     data={lineData2}
+                    stepValue={20000}
                     // data2={lineData2}
                     height={300}
                     width={sw(290)}
                     showVerticalLines
                     spacing={50}
                     initialSpacing={0}
-                    
-                    color1="skyblue"
+                    color1="#83baec"
                     textColor1="green"
                     // hideDataPoints
                     yAxisLabelWidth={60}
                     yAxisThickness={0}
-                    dataPointsColor1="blue"
-                    startFillColor1="skyblue"
+                    dataPointsColor1="#83baec"
+                    startFillColor1="#83baec"
                     startOpacity={0.8}
                     endOpacity={0.3}
                     xAxisLabelTexts={xAxisLabels}

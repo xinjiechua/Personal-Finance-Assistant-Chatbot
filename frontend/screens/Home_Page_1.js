@@ -72,7 +72,7 @@ function Home_Page_1({ navigation }) {
     );
 
     const userId = "1";
-    
+
     const [totalBalance, setTotalBalance] = useState(0);
     const [totalExpenses, setTotalExpenses] = useState(0);
     const [totalIncome, setTotalIncome] = useState(0);
@@ -91,7 +91,6 @@ function Home_Page_1({ navigation }) {
         setTotalBalance(roundedTotalBalance);
         setTotalExpenses(roundedTotalExpenses);
         setTotalIncome(roundedTotalIncome);
-        
     };
 
     useEffect(() => {
@@ -106,7 +105,7 @@ function Home_Page_1({ navigation }) {
                 <View
                     style={{
                         height: sh(200),
-                        backgroundColor: "rgba(109,123,233,0.5)",
+                        // backgroundColor: "rgba(109,123,2sz,0.5)",
                         paddingTop: sh(30),
                         marginBottom: sh(50),
                     }}
@@ -122,10 +121,11 @@ function Home_Page_1({ navigation }) {
                 </Text> */}
                     <LinearGradient
                         style={styles.cardContainer}
-                        colors={["#7499B6", "#5F84A1", "#2E3A94"]}
-                        start={{ x: 0.38, y: -0.9 }}
+                        // colors={["#7499B6", "#5F84A1", "#2E3A94"]}
+                        colors={["#83baec", "#5b69d6"]}
+                        start={{ x: 0.4, y: -0.9 }}
                         end={{ x: 0, y: 0 }}
-                        locations={[0, 0.3, 1]}
+                        locations={[0.2, 1]}
                     >
                         <View style={styles.balanceContainer}>
                             <Text style={[styles.cardTitle, { fontSize: 18 }]}>
@@ -191,6 +191,26 @@ function Home_Page_1({ navigation }) {
                         </View>
                     </LinearGradient>
                 </View>
+                <View
+                    style={[
+                        styles.rowContainer,
+                        {
+                            marginHorizontal: sw(20),
+                            marginVertical: sh(0),
+                            justifyContent: "space-between",
+                            alignItems: "flex-end",
+                        },
+                    ]}
+                >
+                    <Text
+                        style={[
+                            styles.cardTitle,
+                            { color: colors.black, fontSize: 18, flex: 1 },
+                        ]}
+                    >
+                        Expense Breakdown (RM k)
+                    </Text>
+                </View>
                 {/* <DonutChartContainer data={chartExpensesData} /> */}
                 <BarChartComponent />
                 <View
@@ -227,7 +247,7 @@ function Home_Page_1({ navigation }) {
                         </Text>
                     </TouchableOpacity>
                 </View>
-                
+
                 <View style={[styles.chartContainer]}>
                     {/* <View style={styles.rowContainer}>
                         <LineChart
@@ -312,7 +332,7 @@ const styles = StyleSheet.create({
         gap: 20,
         paddingHorizontal: sw(24),
         paddingVertical: sh(15),
-        marginVertical: sh(15),
+        marginVertical: sh(4),
         marginHorizontal: sw(20),
         borderRadius: 20,
         shadowColor: "#000",
