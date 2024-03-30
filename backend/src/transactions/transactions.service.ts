@@ -167,4 +167,19 @@ export class TransactionsService {
       await this.prismaService.$disconnect();
     }
   }
+
+  async getTransactionsByMonth(userId: number, year: number, month: number): Promise<transaction[]> {
+    const startDate = new Date(year, month - 1, 1); // month is 0-indexed in JS Date
+    const endDate = new Date(year, month, 0); // This will give the last day of the given month
+
+    return this.prismaService.transaction.findMany({
+      where: {
+        userid: userId,
+        date: {
+          gte: startDate,
+          lte: endDate,
+        },
+      },
+    });
+  }
 }

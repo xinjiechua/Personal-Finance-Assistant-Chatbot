@@ -19,8 +19,9 @@ export default function App() {
       return null;
   }
   return (
+
     <GlobalState>
-      <AppNav/>
+      <AppNav />
     </GlobalState>
   );
 }

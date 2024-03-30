@@ -15,6 +15,13 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Chat from "../screens/Chat";
 import Add_Transaction from "../screens/Expenses_Add_Transaction";
 import Testing from "../components/BarChart";
+import Expenses_Main from '../screens/Expenses/Expenses_Main';
+import Expenses_Add_1 from "../screens/Expenses/Expenses_Add_1";
+import Expenses_Transaction from "../screens/Expenses/Expenses_Transaction";
+import HomeIcon from '../assets/TabIcon/HomeIcon.png';
+import RecordIcon from '../assets/TabIcon/RecordIcon.png';
+import ProfileIcon from '../assets/TabIcon/ProfileIcon.png';
+import { Image } from 'react-native';
 
 function AppNav() {
     const { isAuth, setIsAuth } = useContext(GlobalContext);
@@ -26,28 +33,39 @@ function AppNav() {
             let iconName;
             if (route.name === "Home") {
                 iconName = HomeIcon;
-            } else if (route.name === "Debt") {
-                iconName = DebtIcon;
-            } else if (route.name === "Expenses") {
-                iconName = ExpensesIcon;
-            } else if (route.name === "Consult") {
-                iconName = ConsultIcon;
+            } else if (route.name === "Record") {
+                iconName = RecordIcon;
             } else if (route.name === "Profile") {
                 iconName = ProfileIcon;
             }
 
-            return (
-                <Image
-                    source={iconName}
-                    style={{ width: size, height: size, tintColor: color }}
-                />
-            );
+            return <Image source={iconName} style={{ width: size, height: size, tintColor: color }} />;
         },
-        tabBarActiveTintColor: "#5F84A1",
-        tabBarInactiveTintColor: "#000",
+        tabBarActiveTintColor: tabBarOptions.activeTintColor,
+        tabBarInactiveTintColor: tabBarOptions.inactiveTintColor,
         tabBarStyle: tabBarOptions.style,
-        tabBarHideOnKeyboard: { tabBarHideOnKeyboard: true },
+        tabBarHideOnKeyboard: tabBarOptions.tabBarHideOnKeyboard,
+        headerShown: false
     });
+
+    const tabBarOptions = {
+        activeTintColor: '#5B69D6', // Active tab icon color
+        inactiveTintColor: '#000', // Inactive tab icon color
+        style: {
+            backgroundColor: 'white', // Background color of the bottom navigation bar
+            borderTopWidth: 1, // Border top width
+            borderTopColor: 'lightgray', // Border top color
+            height: 60, // Height of the bottom navigation bar
+            paddingBottom: 10, // Additional padding at the bottom
+        },
+        tabBarHideOnKeyboard: true,
+    };
+
+
+
+
+
+
     function HomeStackScreen() {
         return (
             <HomeStack.Navigator>
@@ -59,7 +77,7 @@ function AppNav() {
                         headerTitle: "Dashboard",
                     }}
                 />
-                <HomeStack.Screen name="Home2" component={Home_Page_2} />
+                {/* <HomeStack.Screen name="Home2" component={Home_Page_2} /> */}
                 <HomeStack.Screen
                     name="Chat"
                     component={Chat}
@@ -68,13 +86,19 @@ function AppNav() {
                         headerTitle: "",
                     }}
                 />
-                <HomeStack.Screen
-                    name="Testing"
-                    component={Testing}
+                <ExpensesStack.Screen
+                    name="Expenses_Transaction"
+                    component={Expenses_Transaction}
                     options={{
-                        headerTitleAlign: "center",
-                        headerTitle: "",
+                        title: 'Transaction',
+                        headerTitleAlign: 'center',
                     }}
+                />
+
+                <ExpensesStack.Screen
+                    name="Expenses_Add_1"
+                    component={Expenses_Add_1}
+                    options={{ headerTitle: '', headerBackTitle: '' }}
                 />
             </HomeStack.Navigator>
         );
@@ -99,6 +123,7 @@ function AppNav() {
                         headerTitle: "",
                     }}
                 />
+
             </ExpensesStack.Navigator>
         );
     }
@@ -130,6 +155,7 @@ function AppNav() {
                     name="Profile1"
                     component={Profile_Page_1}
                     initialParams={{ setIsAuth: setIsAuth }}
+                    
                 />
             </ProfileStack.Navigator>
         );
@@ -138,10 +164,16 @@ function AppNav() {
     const LandingStack = createNativeStackNavigator();
     function LandingStackScreen() {
         return (
+            
             <LandingStack.Navigator screenOptions={{ headerShown: false }}>
                 <LandingStack.Screen
                     name="Landing1"
                     component={Landing_Page_1}
+                />
+                <LandingStack.Screen
+                    name="Login"
+                    component={Login_Page}
+                    initialParams={{ setIsAuth: setIsAuth }}
                 />
                 <LandingStack.Screen
                     name="Login"
@@ -163,11 +195,15 @@ function AppNav() {
                     />
                 </Stack.Navigator>
             ) : (
-                <Tab.Navigator screenOptions={{ headerShown: false }}>
+                <Tab.Navigator screenOptions={screenOptions}>
                     <Tab.Screen
                         name="Home"
                         component={HomeStackScreen}
                         screenOptions={screenOptions}
+                    />
+                    <Tab.Screen
+                        name="Record"
+                        component={ExpensesStackScreen}
                     />
                     <Tab.Screen name="Record" component={ExpensesStackScreen} />
                     <Tab.Screen name="Profile" component={ProfileStackScreen} />

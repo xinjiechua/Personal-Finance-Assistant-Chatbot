@@ -5,7 +5,7 @@ import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async createUser(
     email: string,
@@ -26,18 +26,28 @@ export class UsersService {
     });
   }
 
-  async getUser(userId: number) {
-    return this.prisma.user.findFirst({ where: { id: userId } });
+  async getUser(userId: number): Promise<user | null> {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return user;
   }
 
-    async login(loginData: { email: string; password: string }): Promise<user> {
-        const userExist = await this.prisma.user.findFirst({ where: { email: loginData.email } });
-        if (!userExist) {
-            throw new NotFoundException('User Has Not Registered Yet')
-        }
-        if (userExist.password !== loginData.password) {
-            throw new NotFoundException('Invalid Credentials');
-        }
-        return userExist;
+  async login(loginData: { email: string; password: string }): Promise<user> {
+
+    const user = await this.prisma.user.findFirst({ where: { email: loginData.email } });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (user.password !== loginData.password) {
+      throw new NotFoundException('Invalid credentials');
+    }
+
+    return user;
   }
 }
