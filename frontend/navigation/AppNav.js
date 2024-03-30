@@ -15,6 +15,10 @@ import Expenses_Main from '../screens/Expenses/Expenses_Main';
 import Expenses_Add_1 from "../screens/Expenses/Expenses_Add_1";
 import Expenses_Transaction from "../screens/Expenses/Expenses_Transaction";
 import Chat from "../screens/Chat";
+import HomeIcon from '../assets/TabIcon/HomeIcon.png';
+import RecordIcon from '../assets/TabIcon/RecordIcon.png';
+import ProfileIcon from '../assets/TabIcon/ProfileIcon.png';
+import { Image } from 'react-native';
 
 function AppNav() {
     const { isAuth, setIsAuth } = useContext(GlobalContext);
@@ -22,33 +26,43 @@ function AppNav() {
     const Tab = createBottomTabNavigator();
     const HomeStack = createNativeStackNavigator();
     const screenOptions = ({ route }) => ({
-
         tabBarIcon: ({ focused, color, size }) => {
             let iconName;
             if (route.name === "Home") {
                 iconName = HomeIcon;
-            } else if (route.name === "Debt") {
-                iconName = DebtIcon;
-            } else if (route.name === "Expenses") {
-                iconName = ExpensesIcon;
-            } else if (route.name === "Consult") {
-                iconName = ConsultIcon;
+            } else if (route.name === "Record") {
+                iconName = RecordIcon;
             } else if (route.name === "Profile") {
                 iconName = ProfileIcon;
             }
 
-            return (
-                <Image
-                    source={iconName}
-                    style={{ width: size, height: size, tintColor: color }}
-                />
-            );
+            return <Image source={iconName} style={{ width: size, height: size, tintColor: color }} />;
         },
-        tabBarActiveTintColor: "#5B69D6",
-        tabBarInactiveTintColor: "#000",
+        tabBarActiveTintColor: tabBarOptions.activeTintColor,
+        tabBarInactiveTintColor: tabBarOptions.inactiveTintColor,
         tabBarStyle: tabBarOptions.style,
-        tabBarHideOnKeyboard: { tabBarHideOnKeyboard: true },
+        tabBarHideOnKeyboard: tabBarOptions.tabBarHideOnKeyboard,
+        headerShown: false
     });
+
+    const tabBarOptions = {
+        activeTintColor: '#5B69D6', // Active tab icon color
+        inactiveTintColor: '#000', // Inactive tab icon color
+        style: {
+            backgroundColor: 'white', // Background color of the bottom navigation bar
+            borderTopWidth: 1, // Border top width
+            borderTopColor: 'lightgray', // Border top color
+            height: 60, // Height of the bottom navigation bar
+            paddingBottom: 10, // Additional padding at the bottom
+        },
+        tabBarHideOnKeyboard: true,
+    };
+
+
+
+
+
+
     function HomeStackScreen() {
         return (
             <HomeStack.Navigator>
@@ -180,7 +194,7 @@ function AppNav() {
                     />
                 </Stack.Navigator>
             ) : (
-                <Tab.Navigator screenOptions={{ headerShown: false }}>
+                <Tab.Navigator screenOptions={screenOptions}>
                     <Tab.Screen
                         name="Home"
                         component={HomeStackScreen}
