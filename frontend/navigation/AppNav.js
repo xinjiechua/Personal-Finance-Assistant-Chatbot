@@ -188,11 +188,7 @@ function AppNav() {
                     component={Login_Page}
                     initialParams={{ setIsAuth: setIsAuth }}
                 />
-                <LandingStack.Screen
-                    name="Login"
-                    component={Login_Page}
-                    initialParams={{ setIsAuth: setIsAuth }}
-                />
+                
                 <LandingStack.Screen name="SignUp" component={Signup_Page} />
             </LandingStack.Navigator>
         );

@@ -14,8 +14,9 @@ import { TypingAnimation } from "react-native-typing-animation";
 import axios from "axios";
 import { colors, fonts, sh, sw } from "../styles/GlobalStyles";
 import { IP_ADD } from "../url";
+import ChartComponent from "../components/ChartComponent";
 
-const MessageBubble = ({ message, time, isSender }) => (
+const MessageBubble = ({ message, time, isSender, chartData }) => (
     <View
         style={[
             styles.messageBubble,
@@ -23,6 +24,7 @@ const MessageBubble = ({ message, time, isSender }) => (
         ]}
     >
         <Text style={styles.messageText}>{message}</Text>
+        {chartData && <ChartComponent jsonData={chartData} />}
         <Text style={styles.messageTime}>{time}</Text>
     </View>
 );
@@ -56,7 +58,9 @@ const Chat = ({ navigation }) => {
         // },
     ];
 
-    const [recommend1Message, setRecommend1Message] = useState("What are my spendings on coffee?");
+    const [recommend1Message, setRecommend1Message] = useState(
+        "What are my spendings on coffee?"
+    );
     const [recommend2Message, setRecommend2Message] = useState("Question 2...");
     const [recommend3Message, setRecommend3Message] = useState("Question 3...");
     const [message, setMessage] = useState("");
@@ -88,39 +92,43 @@ const Chat = ({ navigation }) => {
                     minute: "2-digit",
                 }),
                 isSender: true,
+               
             };
             setMessages((prevMessages) => [...prevMessages, newMessage]);
             console.log("send", message);
             setMessage("");
 
-            
-
             setChatInit(false);
 
             setBotTurn(true);
             setLoading(true);
-            makeResponse(message)
+            makeResponse(message);
             // setTimeout(makeResponse, 3000);
         }
     };
 
     const makeResponse = async (user_message) => {
-        console.log('make response')
-        const response = await axios.post(`http://${IP_ADD}:8000/umhack_app/chatbot/send_message`,{
-            thread_id: thread,
-            message: user_message
-        })
-        console.log('thread id')
-        console.log(thread)
-        if(thread == null){
-            setThread(response.data.thread_id)
+        
+        const response = await axios.post(
+            `http://${IP_ADD}:8000/umhack_app/chatbot/send_message`,
+            {
+                thread_id: thread,
+                message: user_message,
+                
+            }
+        );
+        
+        if (thread == null) {
+            setThread(response.data.thread_id);
         }
-        console.log('thread id----------------')
-        console.log(thread)
-
-        console.log('response from chatbot')
-        console.log(response.data)
-
+    
+        // preprocess chartData
+        const preData = {
+            type: response.data.data_visualisation_response[0],
+            data: response.data.data_visualisation_response[1],
+        };
+        console.log(preData.data.x)
+        console.log(preData.data.y);
         const newMessage = {
             id: messages.length + 1,
             text: response.data.responded_message,
@@ -129,6 +137,8 @@ const Chat = ({ navigation }) => {
                 minute: "2-digit",
             }),
             isSender: false,
+            chartData: preData
+            
         };
         setBotTurn(false);
         setMessages((prevMessages) => [...prevMessages, newMessage]);
@@ -180,6 +190,7 @@ const Chat = ({ navigation }) => {
                             message={msg.text}
                             time={msg.time}
                             isSender={msg.isSender}
+                            chartData={msg.chartData}
                         />
                         {msg.text.includes("we proposed:")}
                     </View>
@@ -302,8 +313,10 @@ const Chat = ({ navigation }) => {
                         </View>
                     ))}
             </ScrollView>
-            <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={sh(94)} >
-
+            <KeyboardAvoidingView
+                behavior="padding"
+                keyboardVerticalOffset={sh(94)}
+            >
                 <View style={styles.inputContainer}>
                     <TouchableOpacity style={styles.iconButton}>
                         <Ionicons name="mic" size={24} color="#5F84A1" />
@@ -314,11 +327,11 @@ const Chat = ({ navigation }) => {
                         onChangeText={setMessage}
                         placeholder="Type a message"
                         onSubmitEditing={() => sendMessage(message)}
-                        />
+                    />
                     <TouchableOpacity
                         style={styles.iconButton}
                         onPress={() => sendMessage(message)}
-                        >
+                    >
                         <Ionicons name="send" size={24} color="#5F84A1" />
                     </TouchableOpacity>
                 </View>
@@ -426,7 +439,7 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
         paddingHorizontal: 12,
         backgroundColor: "#fff",
-        marginBottom: 26
+        marginBottom: 26,
     },
     input: {
         flex: 1,
