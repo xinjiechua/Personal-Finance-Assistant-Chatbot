@@ -216,8 +216,10 @@ class PredictionModelClass:
             # for message in messages.data:
             #     print(message.role, ' > ', message.content[0].__dict__.get('text').__dict__.get('value'))
             
-            return messages.data[0].content[0].__dict__.get('text').__dict__.get('value')
-            # return messages.data[0].content[0].text.value
+            try:
+                return messages.data[0].content[0].__dict__.get('text').__dict__.get('value')
+            except:
+                return messages.data[0].content[0].text.value
                 
     def retrieve_messages(self):
         if self.thread:
