@@ -121,14 +121,18 @@ const Chat = ({ navigation }) => {
         if (thread == null) {
             setThread(response.data.thread_id);
         }
-    
+        console.log(response.data);
+        let preData = {};
+        if (response.data.data_visualisation_response !== null) {
+            preData = {
+                type: response.data.data_visualisation_response[0],
+                data: response.data.data_visualisation_response[1],
+            };
+        }
         // preprocess chartData
-        const preData = {
-            type: response.data.data_visualisation_response[0],
-            data: response.data.data_visualisation_response[1],
-        };
-        console.log(preData.data.x)
-        console.log(preData.data.y);
+        
+        // console.log(preData.data.x)
+        // console.log(preData.data.y);
         const newMessage = {
             id: messages.length + 1,
             text: response.data.responded_message,
