@@ -14,6 +14,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import Chat from "../screens/Chat";
 import Add_Transaction from "../screens/Expenses_Add_Transaction";
+import Testing from "../components/BarChart";
 
 function AppNav() {
     const { isAuth, setIsAuth } = useContext(GlobalContext);
@@ -21,7 +22,6 @@ function AppNav() {
     const Tab = createBottomTabNavigator();
     const HomeStack = createNativeStackNavigator();
     const screenOptions = ({ route }) => ({
-
         tabBarIcon: ({ focused, color, size }) => {
             let iconName;
             if (route.name === "Home") {
@@ -63,6 +63,14 @@ function AppNav() {
                 <HomeStack.Screen
                     name="Chat"
                     component={Chat}
+                    options={{
+                        headerTitleAlign: "center",
+                        headerTitle: "",
+                    }}
+                />
+                <HomeStack.Screen
+                    name="Testing"
+                    component={Testing}
                     options={{
                         headerTitleAlign: "center",
                         headerTitle: "",
@@ -121,7 +129,7 @@ function AppNav() {
                 <ProfileStack.Screen
                     name="Profile1"
                     component={Profile_Page_1}
-                    initialParams={{setIsAuth: setIsAuth}}
+                    initialParams={{ setIsAuth: setIsAuth }}
                 />
             </ProfileStack.Navigator>
         );
@@ -161,10 +169,7 @@ function AppNav() {
                         component={HomeStackScreen}
                         screenOptions={screenOptions}
                     />
-                    <Tab.Screen
-                        name="Record"
-                        component={ExpensesStackScreen}
-                    />
+                    <Tab.Screen name="Record" component={ExpensesStackScreen} />
                     <Tab.Screen name="Profile" component={ProfileStackScreen} />
                 </Tab.Navigator>
             )}

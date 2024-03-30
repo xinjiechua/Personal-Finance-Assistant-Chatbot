@@ -4,16 +4,18 @@ import Animated, { FadeInDown, FadeOutDown } from "react-native-reanimated";
 import { sw, sh } from "../../styles/GlobalStyles";
 
 const RenderItem = ({ item, index }) => {
+    console.log(item);
     return (
+        
         <Animated.View
-            style={[styles.container, { width: sw(150) }]}
+            style={[styles.container, { width: sw(100) }]}
             entering={FadeInDown.delay(index * 200)}
             exiting={FadeOutDown}
         >
             <View style={styles.contentContainer}>
                 <View style={[styles.color, { backgroundColor: item.color }]} />
                 <Text style={styles.text}>{item.name}</Text>
-                <Text style={styles.text}>{item.percentage}%</Text>
+                {/* <Text style={styles.text}>{item.percentage}%</Text> */}
             </View>
         </Animated.View>
     );
@@ -24,8 +26,9 @@ export default RenderItem;
 const styles = StyleSheet.create({
     container: {
         paddingVertical: sh(8),
-        marginBottom: sh(10),
-
+        // marginBottom: sh(10),
+        // borderColor: 'black',
+        // borderWidth: 1,
         borderRadius: sw(20),
     },
     contentContainer: {
@@ -40,7 +43,7 @@ const styles = StyleSheet.create({
         borderRadius: sw(10),
     },
     text: {
-        fontSize: 14,
+        fontSize: 12,
 
         color: "#8C97A7",
     },

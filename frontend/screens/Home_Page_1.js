@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
     Image,
     ScrollView,
@@ -15,10 +15,15 @@ import { AreaChart, XAxis } from "react-native-svg-charts";
 import * as Progress from "react-native-progress";
 import * as shape from "d3-shape";
 import DonutChartContainer from "../components/Donut/DonutChartContainer";
+import axios from "axios";
+import { IP_ADD } from "../url";
+import Testing from "../components/BarChart";
+import BarChartComponent from "../components/BarChart";
+import LineChartComponent from "../components/LineChartComponent";
 
 function Home_Page_1({ navigation }) {
     const toTransactionPage = () => {
-        navigation.navigate("Expenses_Transaction");
+        navigation.navigate("Testing");
     };
 
     const toChat = () => {
@@ -66,6 +71,33 @@ function Home_Page_1({ navigation }) {
         />
     );
 
+    const userId = "1";
+    
+    const [totalBalance, setTotalBalance] = useState(0);
+    const [totalExpenses, setTotalExpenses] = useState(0);
+    const [totalIncome, setTotalIncome] = useState(0);
+    const fetchResponse = async () => {
+        const response = await axios.get(
+            `http://${IP_ADD}:3000/transactions/${userId}/balance`
+        );
+        const { totalAmount, totalBalance, totalExpenses } = response.data;
+
+        // Round off the values to 2 decimal places
+        const roundedTotalBalance = parseFloat(totalBalance).toFixed(2);
+        const roundedTotalExpenses = parseFloat(totalExpenses).toFixed(2);
+        const roundedTotalIncome = parseFloat(totalAmount).toFixed(2);
+
+        // Set the rounded values to state variables
+        setTotalBalance(roundedTotalBalance);
+        setTotalExpenses(roundedTotalExpenses);
+        setTotalIncome(roundedTotalIncome);
+        
+    };
+
+    useEffect(() => {
+        fetchResponse();
+    }, []);
+
     return (
         <View>
             <ScrollView
@@ -105,7 +137,7 @@ function Home_Page_1({ navigation }) {
                                     { fontSize: 30 },
                                 ]}
                             >
-                                RM 2548.00
+                                RM{totalBalance}
                             </Text>
                         </View>
 
@@ -130,7 +162,7 @@ function Home_Page_1({ navigation }) {
                                         { fontSize: 20 },
                                     ]}
                                 >
-                                    RM 1840.00
+                                    RM{totalIncome}
                                 </Text>
                             </View>
                             <View style={styles.columnContainer}>
@@ -153,19 +185,20 @@ function Home_Page_1({ navigation }) {
                                         { fontSize: 20 },
                                     ]}
                                 >
-                                    RM 544.00
+                                    RM{totalExpenses}
                                 </Text>
                             </View>
                         </View>
                     </LinearGradient>
                 </View>
-                <DonutChartContainer />
+                {/* <DonutChartContainer data={chartExpensesData} /> */}
+                <BarChartComponent />
                 <View
                     style={[
                         styles.rowContainer,
                         {
                             marginHorizontal: sw(20),
-                            marginVertical: sh(20),
+                            marginVertical: sh(0),
                             justifyContent: "space-between",
                             alignItems: "flex-end",
                         },
@@ -177,8 +210,9 @@ function Home_Page_1({ navigation }) {
                             { color: colors.black, fontSize: 18, flex: 1 },
                         ]}
                     >
-                        Transactions History
+                        Trend Analysis
                     </Text>
+
                     <TouchableOpacity onPress={toTransactionPage}>
                         <Text
                             style={[
@@ -193,9 +227,9 @@ function Home_Page_1({ navigation }) {
                         </Text>
                     </TouchableOpacity>
                 </View>
-
+                
                 <View style={[styles.chartContainer]}>
-                    <View style={styles.rowContainer}>
+                    {/* <View style={styles.rowContainer}>
                         <LineChart
                             isAnimated
                             areaChart
@@ -224,7 +258,8 @@ function Home_Page_1({ navigation }) {
                             xAxisThickness={0}
                             yAxisThickness={0}
                         />
-                    </View>
+                    </View> */}
+                    <LineChartComponent />
                 </View>
 
                 {/* details parent frame */}

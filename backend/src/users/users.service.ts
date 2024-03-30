@@ -1,5 +1,5 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
-import { User } from '@prisma/client';
+import { user } from '@prisma/client';
 import { NotFoundError } from 'rxjs';
 import { PrismaService } from 'src/prisma.service';
 
@@ -11,7 +11,7 @@ export class UsersService {
     email: string,
     username: string,
     password: string,
-  ): Promise<User> {
+  ): Promise<user> {
     const userExist = await this.prisma.user.findFirst({ where: { email: email } });
     if (userExist) {
       throw new ConflictException(`User already Registered`);
@@ -30,7 +30,7 @@ export class UsersService {
     return this.prisma.user.findFirst({ where: { id: userId } });
   }
 
-    async login(loginData: { email: string; password: string }): Promise<User> {
+    async login(loginData: { email: string; password: string }): Promise<user> {
         const userExist = await this.prisma.user.findFirst({ where: { email: loginData.email } });
         if (!userExist) {
             throw new NotFoundException('User Has Not Registered Yet')

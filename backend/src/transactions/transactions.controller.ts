@@ -53,4 +53,19 @@ export class TransactionsController {
     async getAllTransactions(@Param('userId', ParseIntPipe) userId) {
         return this.transactionService.getAll(userId);
     }
+  
+  @Get(':userId/category')
+  async getAllTransactionsCategory(@Param('userId', ParseIntPipe) userId) {
+    return this.transactionService.getAllExpensesByCategory(userId);
+  }
+
+  @Get(':userId/line')
+  async getIncomeExpensesByMonth(@Param('userId', ParseIntPipe) userId) {
+    return this.transactionService.getTotalExpensesAndIncomeByWeek(userId);
+  }
+
+  @Get(':userId/balance')
+  async getUserFinancialSummary(@Param('userId', ParseIntPipe) userId) {
+    return this.transactionService.getUserFinancialSummary(userId);
+  }
 }

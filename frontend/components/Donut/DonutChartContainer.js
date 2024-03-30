@@ -10,43 +10,45 @@ import RenderItem from "./RenderItem";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { sw, sh, fonts } from "../../styles/GlobalStyles";
 
+
 const RADIUS = sw(100);
 const STROKE_WIDTH = sw(30);
 const OUTER_STROKE_WIDTH = sw(40);
 const GAP = 0.02;
 
-const DonutChartContainer = () => {
-    const n = 5;
+const DonutChartContainer = ({ data }) => {
+    const expensesAmount = [];
+    const expensesCategory = [];
+    const n = data.length;
+    if (data) {
+        data.forEach((element) => {
+            expensesAmount.push(element.totalAmount);
+            expensesCategory.push(element.category);
+        });
+    }
+    console.log(expensesAmount, expensesCategory);
     const totalValue = useSharedValue(0);
     const decimals = useSharedValue([]);
     const colors = ["#E5D8FF", "#FFF0D4", "#FDCED0", "#CAFDEA", "#BCDAFC"];
-    const debtNumbers = [37, 25, 16, 14, 8];
-    const debtNames = [
-        "Food",
-        "Housing",
-        "Transportation",
-        "Apparel",
-        "Entertainment",
-    ];
-    const total = debtNumbers.reduce(
+    const total = expensesAmount.reduce(
         (acc, currentValue) => acc + currentValue,
         0
     );
-    const generatePercentages = calculatePercentage(debtNumbers, total);
+    const generatePercentages = calculatePercentage(expensesAmount, total);
     const generateDecimals = generatePercentages.map(
         (number) => Number(number.toFixed(0)) / 100
     );
     totalValue.value = withTiming(total, { duration: 1000 });
     decimals.value = [...generateDecimals];
 
-    const arrayOfObjects = debtNumbers.map((value, index) => ({
-        name: debtNames[index],
+    const arrayOfObjects = expensesAmount.map((value, index) => ({
+        name: expensesCategory[index],
         value,
         percentage: generatePercentages[index],
         color: colors[index],
     }));
 
-    const data = arrayOfObjects;
+    const labelData = arrayOfObjects;
 
     const font = useFont(require("../../assets/fonts/Inter-Bold.ttf"), sw(20));
 
@@ -75,7 +77,7 @@ const DonutChartContainer = () => {
                         />
                     </View>
                     <View style={styles.labels}>
-                        {data.map((item, index) => {
+                        {labelData.map((item, index) => {
                             return (
                                 <RenderItem
                                     item={item}
