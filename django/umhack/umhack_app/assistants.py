@@ -25,8 +25,8 @@ client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 assistant = client.beta.assistants.retrieve(assistant_id="asst_IbFqFruhOkr9PRMPpxbi5f06")
 
 # functions to be called
-def get_data(sql_query, userId):
-    # return f"Data fetched for user {userId} with query {sql_query}"
+def get_data(sql_query):
+    # return f"Data fetched with query {sql_query}"
     print(f"SQL_QUERY::: {sql_query}")
     print(f"SQL_QUERY::: {sql_query}")
     print(f"SQL_QUERY::: {sql_query}")
@@ -49,7 +49,12 @@ def visualisation_and_prediction(prompt):
     forecast_visualisation_response = response["forecast_visualisation_response"]
     return 'Success'
     
-
+def reset_data():
+    global data_visualisation_response
+    data_visualisation_response = None
+    global forecast_visualisation_response
+    forecast_visualisation_response = None
+    
 class AssistantManager:
     thread_id = None
     
@@ -77,6 +82,7 @@ class AssistantManager:
             print(f"ThreadID::: {self.thread.id}")
 
     def add_message_to_thread(self, role, content):
+        reset_data()
         if self.thread:
             self.client.beta.threads.messages.create(
                 thread_id=self.thread.id, role=role, content=content
@@ -94,8 +100,8 @@ class AssistantManager:
         if self.thread:
             messages = self.client.beta.threads.messages.list(thread_id=self.thread.id)
             
-            for message in messages.data:
-                print(message.role, ' > ', message.content[0].__dict__.get('text').__dict__.get('value'))
+            # for message in messages.data:
+            #     print(message.role, ' > ', message.content[0].`__`dict__.get('text').__dict__.get('value'))
             
             last_message = messages.data[0].content[0].__dict__.get('text').__dict__.get('value')
             return {"last_message": last_message, "data_visualisation_response": data_visualisation_response, "forecast_visualisation_response": forecast_visualisation_response, "thread_id": self.thread.id}
@@ -124,7 +130,7 @@ class AssistantManager:
 
                 if func_name == "get_data":
                     print(f"EXECUTING FUNCTION:: {func_name} with arguments:: {arguments}")
-                    output = get_data(sql_query=arguments["sql_query"], userId=arguments["userId"])
+                    output = get_data(sql_query=arguments["sql_query"])
                     print(f"OUTPUT:: {output}")
 
                     tool_outputs.append({"tool_call_id": action["id"], "output": output})

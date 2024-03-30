@@ -131,9 +131,16 @@ def upload_file():
                         "sql_query": {
                             "type": "string",
                             "description": "SQL query to get the data from the user finance database. COLUMN HEAD: DATE, TRANSACTION_DETAILS, DESCRIPTION, CATEGORY, PAYMENT_METHOD, WITHDRAWAL_AMT, DEPOSIT_AMT. For specific activity, search in DESCRIPTION with ILIKE '%KEYWORD%'. Currency unit is RM. Be more broad on the searching to include more activities. Date format: timestamp"
+                        },
+                        "userId": {
+                            "type": "string",
+                            "description": "User ID of the user whose data is to be fetched from the database"
                         }
                         },
-                        "required": ["sql_query"]
+                        "required": [
+                        "sql_query",
+                        "userId"
+                        ]
                     }
                 }
             }],
@@ -150,18 +157,13 @@ def data_visualisation(type, data):
     data_visualisation_response = [type, data]
     return "success"
 
-def forecast(type, data, steps, freq):
+def forecast_visualisation(type, actual_data, forecast_data):
     global forecast_visualisation_response
-    forecast_visualisation_response = [type, data, steps, freq]
+    forecast_visualisation_response = [type, actual_data, forecast_data]
     return "success"
 
-def reset_global_responses():
-    global data_visualisation_response, forecast_visualisation_response
-    data_visualisation_response = None
-    forecast_visualisation_response = None
-
 def get_data(sql_query):
-    # return f"Data fetched with query {sql_query}"
+    # return f"Data fetched for user {userId} with query {sql_query}"
     print(f"SQL_QUERY::: {sql_query}")
     print(f"SQL_QUERY::: {sql_query}")
     print(f"SQL_QUERY::: {sql_query}")
@@ -183,10 +185,6 @@ class PredictionModelClass:
         self.run = None
         self.create_thread()
         # upload_file()
-        global data_visualisation_response
-        data_visualisation_response = None
-        global forecast_visualisation_response
-        forecast_visualisation_response = None
 
     def create_thread(self):
         if not self.thread:
@@ -217,7 +215,6 @@ class PredictionModelClass:
             #     print(message.role, ' > ', message.content[0].__dict__.get('text').__dict__.get('value'))
             
             return messages.data[0].content[0].__dict__.get('text').__dict__.get('value')
-            # return messages.data[0].content[0].text.value
                 
     def retrieve_messages(self):
         if self.thread:
@@ -245,9 +242,9 @@ class PredictionModelClass:
                     print(f"EXECUTING FUNCTION:: {func_name} with arguments:: {arguments}")
                     output = data_visualisation(type=arguments["type"], data=arguments["data"])
                     tool_outputs.append({"tool_call_id": action["id"], "output": output})
-                elif func_name == "forecast":
+                elif func_name == "forecast_visualisation":
                     print(f"EXECUTING FUNCTION:: {func_name} with arguments:: {arguments}")
-                    output = forecast(type=arguments["type"], data=arguments["data"], steps=arguments["steps"], freq=arguments["freq"])
+                    output = forecast_visualisation(type=arguments["type"], actual_data=arguments["actual_data"], forecast_data=arguments["forecast_data"])
                     tool_outputs.append({"tool_call_id": action["id"], "output": "visualisation done"})
                 elif func_name == "get_data":
                     print(f"EXECUTING FUNCTION:: {func_name} with arguments:: {arguments}")
@@ -288,17 +285,10 @@ class PredictionModelClass:
             print(f"Run-Steps::: {run_steps}")
             return run_steps.data
         
-def run_model(prompt):
-    reset_global_responses()
-    
+def run_add_operation_model(prompt):
     model = PredictionModelClass()
     model.add_message_to_thread('user', prompt)
     model.run_assistant("Predict using ARIMA model and provide visualisation. Use forecast_visualisation instead of data_visualisation when it involves predicting future data.")
     model.wait_for_completion()
-    
-    # Capture and reset the responses after operation
-    temp_data_visualisation_response = data_visualisation_response
-    temp_forecast_visualisation_response = forecast_visualisation_response
-    reset_global_responses()  # Ensure they're reset for the next call
-    return {"message":"Success", "data_visualisation_response":temp_data_visualisation_response, "forecast_visualisation_response":temp_forecast_visualisation_response}
+    return {"message":"Success", "data_visualisation_response":data_visualisation_response, "forecast_visualisation_response":forecast_visualisation_response}
     # model.run_steps() # print run steps for debugging
