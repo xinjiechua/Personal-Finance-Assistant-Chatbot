@@ -38,9 +38,15 @@ def get_data(sql_query, userId):
     
     return result_string
 
+data_visualisation_response = None
+forecast_visualisation_response = None
 def visualisation_and_prediction(prompt):
     response = run_model(prompt)
     print(f"RESPONSE::: {response}")
+    global data_visualisation_response
+    data_visualisation_response = response["data_visualisation_response"]
+    global forecast_visualisation_response
+    forecast_visualisation_response = response["forecast_visualisation_response"]
     return 'Success'
     
 
@@ -91,7 +97,8 @@ class AssistantManager:
             for message in messages.data:
                 print(message.role, ' > ', message.content[0].__dict__.get('text').__dict__.get('value'))
             
-            return messages.data[0].content[0].__dict__.get('text').__dict__.get('value')
+            last_message = messages.data[0].content[0].__dict__.get('text').__dict__.get('value')
+            return {"last_message": last_message, "data_visualisation_response": data_visualisation_response, "forecast_visualisation_response": forecast_visualisation_response}
                 
     def retrieve_messages(self):
         if self.thread:
@@ -137,7 +144,7 @@ class AssistantManager:
     def wait_for_completion(self):
         if self.thread and self.run:
             while True:
-                time.sleep(5)
+                # time.sleep(5)
                 run_status = self.client.beta.threads.runs.retrieve(
                     thread_id=self.thread.id, run_id=self.run.id
                 )
