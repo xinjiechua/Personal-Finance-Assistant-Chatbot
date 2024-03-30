@@ -23,7 +23,7 @@ import LineChartComponent from "../components/LineChartComponent";
 
 function Home_Page_1({ navigation }) {
     const toTransactionPage = () => {
-        navigation.navigate("Testing");
+        navigation.navigate("Expenses_Transaction");
     };
 
     const toChat = () => {
@@ -238,7 +238,7 @@ function Home_Page_1({ navigation }) {
                             style={[
                                 {
                                     fontFamily: fonts.interMedium,
-                                    color: "#5F84A1",
+                                    color: "#5F84A1", 
                                     fontSize: 18,
                                 },
                             ]}

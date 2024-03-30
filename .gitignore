@@ -1,5 +1,5 @@
 /node_modules
-__pycache__/
 .env
+__pycache__/
 /django/umhack/umhack_app/data.csv
 /django/umhack/data.csv
