@@ -5,6 +5,8 @@ import json
 from dotenv import load_dotenv
 import os
 import json
+
+from .generate_plot import generate_plot
 from .db import execute_query, fetch_and_upload
 
 
@@ -150,10 +152,16 @@ def data_visualisation(type, data):
     data_visualisation_response = [type, data]
     return "success"
 
-def forecast(type, data, steps, freq):
+# def forecast(type, data, steps, freq):
+#     global forecast_visualisation_response
+#     run_gen_plot = generate_plot({"type": type, "data":data, "steps":steps, "freq":freq})
+#     forecast_visualisation_response = run_gen_plot
+#     return forecast_visualisation_response
+def forecast(data):
     global forecast_visualisation_response
-    forecast_visualisation_response = [type, data, steps, freq]
-    return "success"
+    forecast_visualisation_response = generate_plot(data)
+    return forecast_visualisation_response
+    # return "success"
 
 def reset_global_responses():
     global data_visualisation_response, forecast_visualisation_response
@@ -249,7 +257,8 @@ class PredictionModelClass:
                     tool_outputs.append({"tool_call_id": action["id"], "output": output})
                 elif func_name == "forecast":
                     print(f"EXECUTING FUNCTION:: {func_name} with arguments:: {arguments}")
-                    output = forecast(type=arguments["type"], data=arguments["data"], steps=arguments["steps"], freq=arguments["freq"])
+                    
+                    output = forecast(arguments)
                     tool_outputs.append({"tool_call_id": action["id"], "output": "visualisation done"})
                 elif func_name == "get_data":
                     print(f"EXECUTING FUNCTION:: {func_name} with arguments:: {arguments}")
@@ -302,5 +311,11 @@ def run_model(prompt):
     temp_data_visualisation_response = data_visualisation_response
     temp_forecast_visualisation_response = forecast_visualisation_response
     reset_global_responses()  # Ensure they're reset for the next call
+    print('----------------------------------------------------------------')
+    print('----------------------------------------------------------------')
+    print('----------------------------------------------------------------')
+    print('----------------------------------------------------------------')
+    print(f"DATA_VISUALISATION_RESPONSE::: {temp_forecast_visualisation_response}")
     return {"message":"Success", "data_visualisation_response":temp_data_visualisation_response, "forecast_visualisation_response":temp_forecast_visualisation_response}
     # model.run_steps() # print run steps for debugging
+    

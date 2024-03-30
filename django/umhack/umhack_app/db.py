@@ -81,4 +81,6 @@ def fetch_and_upload():
 
 # Example usage
 # fetch_and_upload(table_name="YourTableName", local_file_path="path/to/your/local/folder/filename.csv")
-# execute_query("SELECT DATE, TRANSACTION_DETAILS, DESCRIPTION, WITHDRAWAL_AMT FROM Transaction WHERE DESCRIPTION ILIKE '%COFFEE%'")
+# temp = execute_query("SELECT CATEGORY, SUM(WITHDRAWAL_AMT) AS TOTAL_EXPENSES FROM Transaction WHERE CATEGORY IN ('Lifestyle Purchases', 'Childcare', 'Education', 'Insurance') GROUP BY CATEGORY'")
+# print(temp)
+

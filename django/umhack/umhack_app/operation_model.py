@@ -131,16 +131,9 @@ def upload_file():
                         "sql_query": {
                             "type": "string",
                             "description": "SQL query to get the data from the user finance database. COLUMN HEAD: DATE, TRANSACTION_DETAILS, DESCRIPTION, CATEGORY, PAYMENT_METHOD, WITHDRAWAL_AMT, DEPOSIT_AMT. For specific activity, search in DESCRIPTION with ILIKE '%KEYWORD%'. Currency unit is RM. Be more broad on the searching to include more activities. Date format: timestamp"
-                        },
-                        "userId": {
-                            "type": "string",
-                            "description": "User ID of the user whose data is to be fetched from the database"
                         }
                         },
-                        "required": [
-                        "sql_query",
-                        "userId"
-                        ]
+                        "required": ["sql_query"]
                     }
                 }
             }],
@@ -163,7 +156,7 @@ def forecast_visualisation(type, actual_data, forecast_data):
     return "success"
 
 def get_data(sql_query):
-    # return f"Data fetched for user {userId} with query {sql_query}"
+    # return f"Data fetched with query {sql_query}"
     print(f"SQL_QUERY::: {sql_query}")
     print(f"SQL_QUERY::: {sql_query}")
     print(f"SQL_QUERY::: {sql_query}")

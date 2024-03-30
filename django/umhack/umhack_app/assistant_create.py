@@ -24,13 +24,9 @@ def create_assistant():
                                         "sql_query": {
                                             "type": "string",
                                             "description": "SQL query to get the data from the user finance database ie 'SELECT SUM(WITHDRAWAL_AMT) FROM \"Transaction\" WHERE DATE BETWEEN '2021-01-01' AND '2021-12-31' AND CATEGORY='Grocery' AND PAYMENT_METHOD='Credit Card'"
-                                        },
-                                        "userId": {
-                                            "type": "string",
-                                            "description": "User ID of the user whose data is to be fetched from the database"
                                         }
                                     },
-                                    "required": ["sql_query", "userId"]
+                                    "required": ["sql_query"]
                                 }   
                             }
                         },
