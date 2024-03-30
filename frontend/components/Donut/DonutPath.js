@@ -1,5 +1,5 @@
 import React from "react";
-import { Path, Skia } from "@shopify/react-native-skia";
+// import { Path, Skia } from "@shopify/react-native-skia";
 import {
     SharedValue,
     useDerivedValue,

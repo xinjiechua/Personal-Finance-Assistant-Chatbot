@@ -7,11 +7,13 @@ import {
     TouchableOpacity,
     ScrollView,
     StyleSheet,
+    KeyboardAvoidingView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { TypingAnimation } from "react-native-typing-animation";
-
+import axios from "axios";
 import { colors, fonts, sh, sw } from "../styles/GlobalStyles";
+import { IP_ADD } from "../url";
 
 const MessageBubble = ({ message, time, isSender }) => (
     <View
@@ -54,7 +56,7 @@ const Chat = ({ navigation }) => {
         // },
     ];
 
-    const [recommend1Message, setRecommend1Message] = useState("Question 1...");
+    const [recommend1Message, setRecommend1Message] = useState("What are my spendings on coffee?");
     const [recommend2Message, setRecommend2Message] = useState("Question 2...");
     const [recommend3Message, setRecommend3Message] = useState("Question 3...");
     const [message, setMessage] = useState("");
@@ -74,6 +76,8 @@ const Chat = ({ navigation }) => {
     ]);
     const [botTurn, setBotTurn] = useState(true);
     const [loading, setLoading] = useState(false);
+    const [thread, setThread] = useState(null);
+
     const sendMessage = (message) => {
         if (message.trim()) {
             const newMessage = {
@@ -86,21 +90,40 @@ const Chat = ({ navigation }) => {
                 isSender: true,
             };
             setMessages((prevMessages) => [...prevMessages, newMessage]);
-            console.log("send", messages);
+            console.log("send", message);
             setMessage("");
+
+            
 
             setChatInit(false);
 
             setBotTurn(true);
             setLoading(true);
+            makeResponse(message)
             // setTimeout(makeResponse, 3000);
         }
     };
 
-    const makeResponse = () => {
+    const makeResponse = async (user_message) => {
+        console.log('make response')
+        const response = await axios.post(`http://${IP_ADD}:8000/umhack_app/chatbot/send_message`,{
+            thread_id: thread,
+            message: user_message
+        })
+        console.log('thread id')
+        console.log(thread)
+        if(thread == null){
+            setThread(response.data.thread_id)
+        }
+        console.log('thread id----------------')
+        console.log(thread)
+
+        console.log('response from chatbot')
+        console.log(response.data)
+
         const newMessage = {
             id: messages.length + 1,
-            text: "This is an automated response to: ",
+            text: response.data.responded_message,
             time: new Date().toLocaleTimeString([], {
                 hour: "2-digit",
                 minute: "2-digit",
@@ -152,7 +175,7 @@ const Chat = ({ navigation }) => {
                 }
             >
                 {messages.map((msg, index) => (
-                    <View key={msg.id}>
+                    <View>
                         <MessageBubble
                             message={msg.text}
                             time={msg.time}
@@ -189,7 +212,7 @@ const Chat = ({ navigation }) => {
                 )}
                 {chatInit &&
                     chatInitMessage.map((msg, index) => (
-                        <View key={msg.id}>
+                        <View>
                             <View
                                 style={[
                                     styles.messageBubble,
@@ -279,24 +302,27 @@ const Chat = ({ navigation }) => {
                         </View>
                     ))}
             </ScrollView>
-            <View style={styles.inputContainer}>
-                <TouchableOpacity style={styles.iconButton}>
-                    <Ionicons name="mic" size={24} color="#5F84A1" />
-                </TouchableOpacity>
-                <TextInput
-                    style={styles.input}
-                    value={message}
-                    onChangeText={setMessage}
-                    placeholder="Type a message"
-                    onSubmitEditing={() => sendMessage(message)}
-                />
-                <TouchableOpacity
-                    style={styles.iconButton}
-                    onPress={() => sendMessage(message)}
-                >
-                    <Ionicons name="send" size={24} color="#5F84A1" />
-                </TouchableOpacity>
-            </View>
+            <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={sh(94)} >
+
+                <View style={styles.inputContainer}>
+                    <TouchableOpacity style={styles.iconButton}>
+                        <Ionicons name="mic" size={24} color="#5F84A1" />
+                    </TouchableOpacity>
+                    <TextInput
+                        style={styles.input}
+                        value={message}
+                        onChangeText={setMessage}
+                        placeholder="Type a message"
+                        onSubmitEditing={() => sendMessage(message)}
+                        />
+                    <TouchableOpacity
+                        style={styles.iconButton}
+                        onPress={() => sendMessage(message)}
+                        >
+                        <Ionicons name="send" size={24} color="#5F84A1" />
+                    </TouchableOpacity>
+                </View>
+            </KeyboardAvoidingView>
         </View>
     );
 };
@@ -400,6 +426,7 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
         paddingHorizontal: 12,
         backgroundColor: "#fff",
+        marginBottom: 26
     },
     input: {
         flex: 1,

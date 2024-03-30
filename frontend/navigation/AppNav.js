@@ -65,7 +65,10 @@ function AppNav() {
                     component={Chat}
                     options={{
                         headerTitleAlign: "center",
-                        headerTitle: "",
+                        headerTitle: "MyCFO",
+                        // presentation: "modal",
+                        headerBackTitle: "back",
+                        headerBackTitleVisible: true,
                     }}
                 />
                 <HomeStack.Screen

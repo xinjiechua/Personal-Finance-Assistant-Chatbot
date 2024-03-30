@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native";
 import React from "react";
 import { SharedValue, useDerivedValue } from "react-native-reanimated";
-import { Canvas, Path, SkFont, Skia, Text } from "@shopify/react-native-skia";
+// import { Canvas, Path, SkFont, Skia, Text } from "@shopify/react-native-skia";
 import DonutPath from "./DonutPath";
 import { sw, sh } from "../../styles/GlobalStyles";
 

@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { ScrollView, StyleSheet, View, Text } from "react-native";
 import DonutChart from "./DonutChart";
-import { useFont, SkFont, Skia, SkRect } from "@shopify/react-native-skia";
+// import { useFont, SkFont, Skia, SkRect } from "@shopify/react-native-skia";
 import { SharedValue, useDerivedValue } from "react-native-reanimated";
 import { useSharedValue, withTiming } from "react-native-reanimated";
 import { calculatePercentage } from "./calculatePercentage";

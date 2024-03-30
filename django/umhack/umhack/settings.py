@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-%_ensz^!4f+ic@rk_qs2y1c&w#ysou&5-d*iba_&+w2zknh2)(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.0.3'];
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.0.3', '10.168.105.64', '0.0.0.0']
 
 
 # Application definition
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -47,10 +48,18 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOW_CREDENTIALS = True
+
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3001",  # or the origin of your frontend application
+    'exp://172.20.10.3:8081',
 ]
 
 ROOT_URLCONF = 'umhack.urls'

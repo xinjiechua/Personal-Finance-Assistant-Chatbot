@@ -98,7 +98,7 @@ class AssistantManager:
                 print(message.role, ' > ', message.content[0].__dict__.get('text').__dict__.get('value'))
             
             last_message = messages.data[0].content[0].__dict__.get('text').__dict__.get('value')
-            return {"last_message": last_message, "data_visualisation_response": data_visualisation_response, "forecast_visualisation_response": forecast_visualisation_response}
+            return {"last_message": last_message, "data_visualisation_response": data_visualisation_response, "forecast_visualisation_response": forecast_visualisation_response, "thread_id": self.thread.id}
                 
     def retrieve_messages(self):
         if self.thread:
