@@ -13,6 +13,7 @@ import { useFocusEffect } from '@react-navigation/native';
 
 import DonutChartContainer from "./Utils/DonutChart/DonutChartContainer.js";
 import Transaction_Card from "./Utils/Transaction/Transaction_Card.js";
+import { IP_ADD } from '../../url.js';
 
 function Expenses_Transaction({ navigation }) {
     const [transactions, setTransactions] = useState([]);
@@ -33,7 +34,7 @@ function Expenses_Transaction({ navigation }) {
     const fetchTransactions = async (year, month) => {
         try {
 
-            const url = `http://10.0.2.2:3000/transactions/1/${year}/${month + 1}`;
+            const url = `http://${IP_ADD}:3000/transactions/1/${year}/${month + 1}`;
             const response = await fetch(url);
             if (!response.ok) {
                 throw new Error('Network response was not ok');

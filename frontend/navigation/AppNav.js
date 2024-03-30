@@ -15,13 +15,13 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Chat from "../screens/Chat";
 import Add_Transaction from "../screens/Expenses_Add_Transaction";
 import Testing from "../components/BarChart";
-import Expenses_Main from '../screens/Expenses/Expenses_Main';
+import Expenses_Main from "../screens/Expenses/Expenses_Main";
 import Expenses_Add_1 from "../screens/Expenses/Expenses_Add_1";
 import Expenses_Transaction from "../screens/Expenses/Expenses_Transaction";
-import HomeIcon from '../assets/TabIcon/HomeIcon.png';
-import RecordIcon from '../assets/TabIcon/RecordIcon.png';
-import ProfileIcon from '../assets/TabIcon/ProfileIcon.png';
-import { Image } from 'react-native';
+import HomeIcon from "../assets/TabIcon/HomeIcon.png";
+import RecordIcon from "../assets/TabIcon/RecordIcon.png";
+import ProfileIcon from "../assets/TabIcon/ProfileIcon.png";
+import { Image } from "react-native";
 
 function AppNav() {
     const { isAuth, setIsAuth } = useContext(GlobalContext);
@@ -39,32 +39,32 @@ function AppNav() {
                 iconName = ProfileIcon;
             }
 
-            return <Image source={iconName} style={{ width: size, height: size, tintColor: color }} />;
+            return (
+                <Image
+                    source={iconName}
+                    style={{ width: size, height: size, tintColor: color }}
+                />
+            );
         },
         tabBarActiveTintColor: tabBarOptions.activeTintColor,
         tabBarInactiveTintColor: tabBarOptions.inactiveTintColor,
         tabBarStyle: tabBarOptions.style,
         tabBarHideOnKeyboard: tabBarOptions.tabBarHideOnKeyboard,
-        headerShown: false
+        headerShown: false,
     });
 
     const tabBarOptions = {
-        activeTintColor: '#5B69D6', // Active tab icon color
-        inactiveTintColor: '#000', // Inactive tab icon color
+        activeTintColor: "#5B69D6", // Active tab icon color
+        inactiveTintColor: "#000", // Inactive tab icon color
         style: {
-            backgroundColor: 'white', // Background color of the bottom navigation bar
+            backgroundColor: "white", // Background color of the bottom navigation bar
             borderTopWidth: 1, // Border top width
-            borderTopColor: 'lightgray', // Border top color
+            borderTopColor: "lightgray", // Border top color
             height: 60, // Height of the bottom navigation bar
             paddingBottom: 10, // Additional padding at the bottom
         },
         tabBarHideOnKeyboard: true,
     };
-
-
-
-
-
 
     function HomeStackScreen() {
         return (
@@ -86,20 +86,20 @@ function AppNav() {
                         headerTitle: "",
                     }}
                 />
-                <ExpensesStack.Screen
+                {/* <ExpensesStack.Screen
                     name="Expenses_Transaction"
                     component={Expenses_Transaction}
                     options={{
-                        title: 'Transaction',
-                        headerTitleAlign: 'center',
+                        title: "Transaction",
+                        headerTitleAlign: "center",
                     }}
                 />
 
                 <ExpensesStack.Screen
                     name="Expenses_Add_1"
                     component={Expenses_Add_1}
-                    options={{ headerTitle: '', headerBackTitle: '' }}
-                />
+                    options={{ headerTitle: "", headerBackTitle: "" }}
+                /> */}
             </HomeStack.Navigator>
         );
     }
@@ -109,13 +109,21 @@ function AppNav() {
         return (
             <ExpensesStack.Navigator screenOptions={{ headerShown: true }}>
                 <ExpensesStack.Screen
+                    name="Expenses_Transaction"
+                    component={Expenses_Transaction}
+                    options={{
+                        title: "Transaction",
+                        headerTitleAlign: "center",
+                    }}
+                />
+                {/* <ExpensesStack.Screen
                     name="Expenses1"
                     component={Expenses_Page_1}
                     options={{
                         headerTitleAlign: "center",
                         headerTitle: "Expenses",
                     }}
-                />
+                /> */}
                 <ExpensesStack.Screen
                     name="Add_Expenses"
                     component={Add_Transaction}
@@ -123,7 +131,11 @@ function AppNav() {
                         headerTitle: "",
                     }}
                 />
-
+                <ExpensesStack.Screen
+                    name="Expenses_Add_1"
+                    component={Expenses_Add_1}
+                    options={{ headerTitle: "", headerBackTitle: "" }}
+                />
             </ExpensesStack.Navigator>
         );
     }
@@ -155,7 +167,6 @@ function AppNav() {
                     name="Profile1"
                     component={Profile_Page_1}
                     initialParams={{ setIsAuth: setIsAuth }}
-                    
                 />
             </ProfileStack.Navigator>
         );
@@ -164,7 +175,6 @@ function AppNav() {
     const LandingStack = createNativeStackNavigator();
     function LandingStackScreen() {
         return (
-            
             <LandingStack.Navigator screenOptions={{ headerShown: false }}>
                 <LandingStack.Screen
                     name="Landing1"
@@ -201,11 +211,8 @@ function AppNav() {
                         component={HomeStackScreen}
                         screenOptions={screenOptions}
                     />
-                    <Tab.Screen
-                        name="Record"
-                        component={ExpensesStackScreen}
-                    />
                     <Tab.Screen name="Record" component={ExpensesStackScreen} />
+                    
                     <Tab.Screen name="Profile" component={ProfileStackScreen} />
                 </Tab.Navigator>
             )}
